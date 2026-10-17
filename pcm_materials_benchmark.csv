@@ -1,0 +1,5 @@
+Material_Candidate,Bandgap_Eg_eV,Photon_Ratio_hnu_over_Eg,Index_Amorphous_na,Index_Crystalline_nc,Delta_n,Extinction_Amorphous_ka,Extinction_Crystalline_kc,Single_Cell_IL_dB,Tree_4Stage_Loss_dB,Benes_15Stage_Loss_dB,Optical_Link_Status,Crystallization_Temp_Tc_C,Melting_Temp_Tm_C,Static_Hold_Power_W,Switching_Energy_pJ_cell,Endurance_Cycles
+Ge2Sb2Te5 (GST-225),0.60,1.94,3.45,4.60,1.15,0.12,0.85,2.65,10.60,39.75,BLOCKED,160,620,0,14.2,1.0E+05
+Ge4Sb2Te7 (GST-467),0.65,1.79,3.50,4.55,1.05,0.09,0.72,2.45,9.80,36.75,BLOCKED,175,605,0,11.8,1.0E+06
+Ge2Sb2Se4Te1 (GSST),0.75,1.55,2.70,3.30,0.60,0.04,0.35,1.15,4.60,17.25,DEGRADED,210,540,0,8.5,1.0E+07
+Sb2S3 (JANUS Selected),1.72,0.68,2.70,3.30,0.60,0.00001,0.00008,0.10,1.61,1.80,CLOSED (+4.61 dB margin),270,540,0,4.2,1.0E+08
