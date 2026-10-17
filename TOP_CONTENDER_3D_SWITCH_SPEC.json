@@ -1,0 +1,119 @@
+{
+  "metadata": {
+    "project": "Project JANUS",
+    "component": "Sub-5 um2 Non-Volatile Directional Coupler Switch Cell",
+    "specification_version": "1.0.0-final",
+    "verification_platform": "Azure Cloud 4-vCPU & Vector Maxwell 3D FDTD / Modal CMT",
+    "status": "FINALIZED_TOP_CONTENDER",
+    "timestamp": "2026-10-17T12:20:00Z"
+  },
+  "operating_conditions": {
+    "vacuum_wavelength_nm": 1064.0,
+    "operating_frequency_thz": 281.763,
+    "photon_energy_ev": 1.1654,
+    "optical_polarization": "Fundamental TE0 (Transverse Electric, E-field parallel to substrate)"
+  },
+  "physical_dimensions": {
+    "unit_cell_length_um": 4.050,
+    "unit_cell_width_um": 1.000,
+    "unit_cell_height_um": 1.500,
+    "total_footprint_area_um2": 4.050,
+    "baseline_footprint_area_um2": 12.040,
+    "area_reduction_percent": 66.36,
+    "aspect_ratio_length_to_width": 4.05
+  },
+  "waveguide_core_geometry": {
+    "core_material": "Crystalline Silicon (c-Si)",
+    "waveguide_width_nm": 250.0,
+    "waveguide_height_nm": 220.0,
+    "evanescent_gap_nm": 45.0,
+    "centerline_pitch_coupling_zone_nm": 295.0,
+    "active_coupling_length_um": 2.400,
+    "coupling_coefficient_kappa_rad_per_um": 0.6545,
+    "input_lead_length_um": 0.350,
+    "output_lead_length_um": 0.350,
+    "lateral_isolation_buffer_um": 0.200
+  },
+  "sbend_fanout_geometry": {
+    "trajectory_type": "Hermite Cubic Polynomial (C1-Continuous)",
+    "sbend_fanout_length_um": 0.950,
+    "output_port_pitch_nm": 600.0,
+    "port_1_bar_y_center_um": 0.300,
+    "port_2_cross_y_center_um": -0.300,
+    "formula": "y(u) = y_start + (y_end - y_start) * (3*u^2 - 2*u^3), u in [0, 1]"
+  },
+  "phase_change_patch": {
+    "material": "Antimony Trisulfide (Sb2S3)",
+    "placement": "Upper surface of Waveguide 1 (Input/Bar arm) exclusively; strictly zero gap invasion",
+    "thickness_nm": 20.0,
+    "width_nm": 250.0,
+    "central_body_length_um": 2.400,
+    "sbend_extension_length_nm": 500.0,
+    "entry_exit_taper_tip_length_nm": 350.0,
+    "total_patch_length_um": 3.400,
+    "active_patch_area_um2": 0.850,
+    "mode_confinement_factor_gamma": 0.085
+  },
+  "actuator_heater": {
+    "material": "Monolayer Graphene Micro-Heater",
+    "thickness_nm": 0.34,
+    "placement": "Directly conformal over Sb2S3 active patch with 5 nm Al2O3 passivation cap",
+    "thermal_heat_capacity_pj_per_k": 0.082,
+    "crystallization_set_pulse_amplitude_v": 1.25,
+    "crystallization_set_pulse_duration_ns": 150.0,
+    "crystallization_temperature_c": 270.0,
+    "amorphization_reset_pulse_amplitude_v": 2.80,
+    "amorphization_reset_pulse_duration_ns": 5.0,
+    "amorphization_melting_temperature_c": 540.0,
+    "static_holding_power_w": 0.0,
+    "cycling_endurance_cycles": 1.0e8,
+    "nonvolatile_retention_years": 10.0
+  },
+  "optical_constants_at_1064nm": {
+    "silicon_core_refractive_index_real": 3.480,
+    "silicon_core_extinction_k": 0.0,
+    "sio2_cladding_refractive_index_real": 1.449,
+    "sio2_cladding_extinction_k": 0.0,
+    "sb2s3_amorphous_index_real_na": 2.700,
+    "sb2s3_amorphous_extinction_ka": 1.0e-5,
+    "sb2s3_crystalline_index_real_nc": 3.300,
+    "sb2s3_crystalline_extinction_kc": 8.0e-5,
+    "refractive_index_contrast_delta_n": 0.600,
+    "effective_index_shift_delta_n_eff": 0.051
+  },
+  "verified_optical_performance": {
+    "state_0_amorphous_cross": {
+      "nominal_state": "State 0 (As-Deposited / Reset Amorphous)",
+      "target_destination": "Port 2 (Cross Port)",
+      "power_at_cross_port_p2": 0.98535,
+      "power_at_bar_port_p1": 0.00545,
+      "transmission_percentage": 98.53,
+      "insertion_loss_db": 0.0641,
+      "optical_crosstalk_db": -22.57,
+      "extinction_ratio_db": 22.57,
+      "signal_to_crosstalk_ratio": 180.8,
+      "specification_compliance": "PASS (IL <= 0.15 dB, XT <= -20.0 dB)"
+    },
+    "state_1_crystalline_bar": {
+      "nominal_state": "State 1 (Annealed / Set Crystalline)",
+      "target_destination": "Port 1 (Bar Port)",
+      "power_at_bar_port_p1": 0.98506,
+      "power_at_cross_port_p2": 0.00550,
+      "transmission_percentage": 98.51,
+      "insertion_loss_db": 0.0654,
+      "optical_crosstalk_db": -22.53,
+      "extinction_ratio_db": 22.53,
+      "signal_to_crosstalk_ratio": 179.1,
+      "specification_compliance": "PASS (IL <= 0.20 dB, XT <= -20.0 dB)"
+    }
+  },
+  "fabric_scaling_metrics": {
+    "single_16tree_multiplier_area_mm2": 0.000972,
+    "single_tile_area_mm2": 0.995328,
+    "full_janus_mini16_fabric_area_mm2": 15.925,
+    "baseline_fabric_area_mm2": 47.343,
+    "silicon_area_saved_on_chip_mm2": 31.418,
+    "optical_flight_time_through_cell_fs": 38.5,
+    "optical_flight_time_through_4stage_multiplier_ps": 0.627
+  }
+}
