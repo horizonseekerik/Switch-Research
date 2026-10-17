@@ -61,15 +61,15 @@ def make_cosine_sbend(x_start, x_end, y_start, y_end, w1, w2=None, n_pts=30):
 
 
 def make_tapered_pcm(x_start, y_c, l_body, l_t, w_p, w_t=0.020, n_pts=20):
-    """Parabolic PCM patch: tip -> body -> tip, strictly inside straight section."""
+    """Adiabatic raised-cosine PCM patch: tip -> body -> tip, strictly inside straight section."""
     u_l = np.linspace(0, 1, n_pts)[:-1]
     xl = x_start + u_l * l_t
-    wl = w_t + (w_p - w_t) * (2 * u_l - u_l**2)
+    wl = w_t + (w_p - w_t) * 0.5 * (1.0 - np.cos(np.pi * u_l))
     x_body_start = x_start + l_t
     x_body_end = x_body_start + l_body
     u_r = np.linspace(0, 1, n_pts)[1:]
     xr = x_body_end + u_r * l_t
-    wr = w_t + (w_p - w_t) * (1.0 - u_r**2)
+    wr = w_t + (w_p - w_t) * 0.5 * (1.0 + np.cos(np.pi * u_r))
     top = [mp.Vector3(xi, y_c + wi/2.0, 0) for xi, wi in zip(xl, wl)]
     top.append(mp.Vector3(x_body_start, y_c + w_p/2.0, 0))
     top.append(mp.Vector3(x_body_end, y_c + w_p/2.0, 0))
@@ -82,10 +82,10 @@ def make_tapered_pcm(x_start, y_c, l_body, l_t, w_p, w_t=0.020, n_pts=20):
 
 
 def make_wg_input_taper(x_start, x_end, y_c, w_full, w_tip=0.020, n_pts=20):
-    """Adiabatic silicon inverse taper for WG2 entrance (prevents facet backreflection)."""
+    """Adiabatic raised-cosine silicon inverse taper for WG2 entrance."""
     u = np.linspace(0, 1, n_pts)
     x = x_start + u * (x_end - x_start)
-    w = w_tip + (w_full - w_tip) * u
+    w = w_tip + (w_full - w_tip) * 0.5 * (1.0 - np.cos(np.pi * u))
     top = [mp.Vector3(xi, y_c + wi/2.0, 0) for xi, wi in zip(x, w)]
     bot = [mp.Vector3(xi, y_c - wi/2.0, 0) for xi, wi in reversed(list(zip(x, w)))]
     return top + bot
@@ -97,13 +97,13 @@ def make_wg_input_taper(x_start, x_end, y_c, w_full, w_tip=0.020, n_pts=20):
 
 def run_straight_through_dc(
         state="amorphous",
-        l_c=4.50,          # Straight coupling length (um) - centered on Kogelnik null
+        l_c=5.10,          # Straight coupling length (um) - centered on exact Kogelnik null
         gap=0.100,         # Evanescent gap (um)
         w_wg=0.240,        # Waveguide core width (um)
         w_bend=0.300,      # Widened low-loss S-bend width for WG2 (um)
         h_wg=0.220,        # Silicon core height (um)
         t_pcm=0.150,       # Sb2S3 PCM thickness (um)
-        l_tip=0.350,       # Parabolic PCM taper length per side (um)
+        l_tip=0.450,       # Raised-cosine adiabatic PCM taper length per side (um)
         w_tip=0.020,       # Lithographic tip width (um)
         l_in=0.350,        # Input lead length (um)
         l_bend=1.300,      # Cosine S-bend fanout length for WG2 (um)
@@ -320,7 +320,7 @@ def run_straight_through_dc(
 # Both States Runner
 # ─────────────────────────────────────────────────────────────────────────────
 
-def run_both_states(l_c=4.50, gap=0.100, resolution=20, **kwargs):
+def run_both_states(l_c=5.10, gap=0.100, resolution=20, **kwargs):
     print(f"\n{'#'*72}")
     print(f"STRAIGHT-THROUGH DUAL-STATE VERIFICATION: L_c={l_c:.2f}um, gap={gap*1000:.0f}nm, res={resolution}")
     print(f"{'#'*72}\n")
@@ -371,10 +371,10 @@ def run_both_states(l_c=4.50, gap=0.100, resolution=20, **kwargs):
 # Parameter Sweep
 # ─────────────────────────────────────────────────────────────────────────────
 
-def run_sweep(lc_min=4.30, lc_max=4.70, lc_step=0.05,
+def run_sweep(lc_min=4.90, lc_max=5.30, lc_step=0.10,
               gap_list=None, resolution=20):
     if gap_list is None:
-        gap_list = [0.095, 0.100, 0.105]
+        gap_list = [0.100]
 
     results = []
     print(f"\nSWEEP: L_c in [{lc_min:.2f}, {lc_max:.2f}] step {lc_step:.2f} | gaps={[int(g*1000) for g in gap_list]}nm")
@@ -433,14 +433,14 @@ def run_sweep(lc_min=4.30, lc_max=4.70, lc_step=0.05,
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="PROJECT JANUS: Straight-Through 1x2 DC Switch 3D MEEP")
     parser.add_argument("--state", default="both", choices=["amorphous", "crystalline", "both"])
-    parser.add_argument("--lc", type=float, default=4.50, help="Straight coupling length (um)")
+    parser.add_argument("--lc", type=float, default=5.10, help="Straight coupling length (um)")
     parser.add_argument("--gap", type=float, default=0.100, help="Evanescent gap (um)")
     parser.add_argument("--resolution", type=int, default=20, help="FDTD grid resolution (px/um)")
     parser.add_argument("--sweep", action="store_true", help="Run parameter sweep")
-    parser.add_argument("--lc_min", type=float, default=4.30, help="Sweep: min L_c (um)")
-    parser.add_argument("--lc_max", type=float, default=4.70, help="Sweep: max L_c (um)")
-    parser.add_argument("--lc_step", type=float, default=0.05, help="Sweep: L_c step (um)")
-    parser.add_argument("--gaps", type=float, nargs="+", default=[0.095, 0.100, 0.105], help="Sweep: list of gaps (um)")
+    parser.add_argument("--lc_min", type=float, default=4.90, help="Sweep: min L_c (um)")
+    parser.add_argument("--lc_max", type=float, default=5.30, help="Sweep: max L_c (um)")
+    parser.add_argument("--lc_step", type=float, default=0.10, help="Sweep: L_c step (um)")
+    parser.add_argument("--gaps", type=float, nargs="+", default=[0.100], help="Sweep: list of gaps (um)")
     args = parser.parse_args()
 
     if args.sweep:
