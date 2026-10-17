@@ -15,12 +15,13 @@ This directory contains research, specifications, simulation models, and Azure 4
 ## 📑 Directory Contents & Roadmap
 
 ### 🔬 1. Sub-5 $\mu\text{m}^2$ Switch Simulation & Azure 4-CPU Search Engine
-- **[`sub5um_switch_meep.py`](./sub5um_switch_meep.py)**: Full-wave MEEP FDTD and Coupled-Mode Theory (CMT) simulation class modeling the ultra-compact switch cell with integrated Hermite S-bend tapers and apodized $\text{Sb}_2\text{S}_3$ patches.
+- **[`sub5um_switch_meep.py`](./sub5um_switch_meep.py)**: Full-wave 2D MEEP FDTD and Coupled-Mode Theory (CMT) simulation class modeling the ultra-compact switch cell with integrated Hermite S-bend tapers and apodized $\text{Sb}_2\text{S}_3$ patches.
+- **[`sub5um_switch_3d_meep.py`](./sub5um_switch_3d_meep.py)**: Full-wave 3D Vector Maxwell MEEP FDTD simulation model capturing realistic vertical layer stack ($220\,\text{nm}$ Si core, $20\,\text{nm}$ $\text{Sb}_2\text{S}_3$ film, $\text{SiO}_2$ BOX substrate & cladding).
 - **[`mpb_coupler_analyzer.py`](./mpb_coupler_analyzer.py)**: Maxwell eigenmode supermode solver computing $n_{\text{even}}, n_{\text{odd}}, \Delta n, L_c, \kappa$, and the exact $\pi$-null decoupling condition $\Delta\beta L_c = \sqrt{3}\pi$.
 - **[`azure_4cpu_grid_search.py`](./azure_4cpu_grid_search.py)**: Multi-process grid-search engine optimized for a 4-vCPU Azure Cloud node. Evaluates 5,040 design points across gaps, widths, lengths, and fanouts.
 - **[`azure_run_switch_search.sh`](./azure_run_switch_search.sh)**: Executable bash script for running the search, executing the test suite, and archiving results on Azure.
 - **[`AZURE_4CPU_SEARCH_GUIDE.md`](./AZURE_4CPU_SEARCH_GUIDE.md)**: Complete step-by-step instructions for provisioning a 4-vCPU Azure VM (`Standard_D4s_v5` or `Standard_F4s_v2`, ~$0.19/hr) and executing the search.
-- **[`test_sub5um_switch.py`](./test_sub5um_switch.py)**: Automated pytest suite verifying geometric footprint ($< 5.0\ \mu\text{m}^2$), insertion loss, crosstalk, energy conservation, supermode eigensolver, and MEEP FDTD smoke execution (**7/7 Tests PASSED**).
+- **[`test_sub5um_switch.py`](./test_sub5um_switch.py)**: Automated pytest suite verifying geometric footprint ($< 5.0\ \mu\text{m}^2$), 3D cell consistency, insertion loss, crosstalk, energy conservation, supermode eigensolver, and MEEP FDTD smoke execution (**8/8 Tests PASSED**).
 
 ### 📊 2. Generated Optimization Datasets & Results
 - **[`sub5um_switch_search_results.csv`](./sub5um_switch_search_results.csv)**: Complete data table of evaluated parameter combinations with losses, crosstalk, and areas.

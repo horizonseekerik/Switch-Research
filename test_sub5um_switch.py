@@ -34,6 +34,18 @@ def test_footprint_strict_sub_5um2():
     assert cell_w <= 1.10, f"Cell width {cell_w:.3f} um is too wide!"
 
 
+def test_footprint_strict_sub_5um2_3d():
+    """Verify that the 3D switch cell model preserves identical < 5.0 um^2 footprint."""
+    from sub5um_switch_3d_meep import Sub5umSwitchCell3DMeep
+    sw3d = Sub5umSwitchCell3DMeep(
+        w_wg=0.250, gap=0.045, l_c=2.400, l_bend=0.950, y_pitch_out=0.600
+    )
+    cell_len, cell_w, cell_area = sw3d.compute_footprint()
+    assert cell_area < 5.00, f"3D cell area {cell_area:.3f} um^2 exceeds 5.00 um^2 limit!"
+    assert cell_len <= 4.60, f"3D cell length {cell_len:.3f} um is too long!"
+    assert cell_w <= 1.10, f"3D cell width {cell_w:.3f} um is too wide!"
+
+
 def test_amorphous_state_optical_metrics():
     """Verify insertion loss and crosstalk in the Amorphous Cross State."""
     sw = Sub5umSwitchCellMeep(
