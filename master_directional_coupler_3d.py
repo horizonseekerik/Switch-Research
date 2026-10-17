@@ -100,7 +100,7 @@ class DirectionalCouplerSwitch3D:
                  w_wg: float = 0.240,        # 240 nm waveguide core width (um)
                  h_wg: float = 0.220,        # 220 nm waveguide core height (um)
                  t_pcm: float = 0.150,       # 150 nm Sb2S3 thickness (um)
-                 gap: float = 0.040,         # 40 nm evanescent gap (um)
+                 gap: float = 0.120,         # 120 nm evanescent gap (um) - matched to u=sqrt(3)
                  l_c: float = 4.650,         # 4.65 um active coupling length (um)
                  l_ext: float = 0.400,       # 400 nm taper extension into access leads (um)
                  l_tip: float = 0.500,       # 500 nm adiabatic taper tip length (um)
@@ -353,8 +353,8 @@ if __name__ == "__main__":
                         help="3D grid resolution in pixels/um (default: 20 -> dx = 50 nm)")
     parser.add_argument("--l_c", type=float, default=4.65,
                         help="Active coupling length in um (default: 4.65)")
-    parser.add_argument("--gap", type=float, default=0.040,
-                        help="Evanescent gap in um (default: 0.040)")
+    parser.add_argument("--gap", type=float, default=0.120,
+                        help="Evanescent gap in um (default: 0.120 -> 120 nm)")
     parser.add_argument("--output-dir", type=str, default=".",
                         help="Directory to save simulation results (default: .)")
     args = parser.parse_args()
