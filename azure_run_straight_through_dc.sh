@@ -53,7 +53,7 @@ fi
 
 # ── 4. Parameters ────────────────────────────────────────────────────────────
 MODE="${1:-both}"
-LC="${2:-4.60}"
+LC="${2:-4.25}"
 GAP="${3:-0.100}"
 RES="${4:-20}"
 
@@ -68,7 +68,7 @@ echo "  Architecture : Port 1 = Straight Through (0 dB bend loss)"
 echo "                 Port 2 = Evanescent Drop (Low-Loss S-Bend)"
 echo "================================================================"
 echo "  Mode        : ${MODE}"
-echo "  L_c         : ${LC} um (Optimal Crossing at gap=${GAP}um)"
+echo "  L_c         : ${LC} um (Crystalline Refinement Peak at gap=${GAP}um)"
 echo "  Gap         : $(echo "${GAP} * 1000" | bc -l | xargs printf '%.0f') nm"
 echo "  Resolution  : ${RES} px/um"
 echo "  Multi-CPU   : ${RUN_CMD}"
@@ -79,10 +79,10 @@ echo ""
 START_TIME=$(date +%s)
 
 if [ "${MODE}" = "sweep" ]; then
-    echo "Launching fine-grid parameter sweep around optimal crossing (L_c=4.40 to 4.80 um, gap=100nm)..."
+    echo "Launching fine-grid parameter sweep around peak (L_c=4.10 to 4.40 um, gap=100nm)..."
     ${RUN_CMD} straight_through_dc_switch_3d.py \
         --sweep \
-        --lc_min 4.40 --lc_max 4.80 --lc_step 0.10 \
+        --lc_min 4.10 --lc_max 4.40 --lc_step 0.10 \
         --gaps 0.100 \
         --resolution "${RES}" 2>&1 | tee "${LOG_FILE}"
 elif [ "${MODE}" = "amorphous" ] || [ "${MODE}" = "crystalline" ]; then

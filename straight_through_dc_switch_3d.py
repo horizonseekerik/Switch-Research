@@ -97,16 +97,16 @@ def make_wg_input_taper(x_start, x_end, y_c, w_full, w_tip=0.020, n_pts=20):
 
 def run_straight_through_dc(
         state="amorphous",
-        l_c=4.60,          # Straight coupling length (um) - centered on optimal crossing
+        l_c=4.25,          # Straight coupling length (um) - peak dual-state transmission
         gap=0.100,         # Evanescent gap (um) - verified low-loss regime
         w_wg=0.240,        # Waveguide core width (um)
         w_bend=0.300,      # Widened low-loss S-bend width for WG2 (um)
         h_wg=0.220,        # Silicon core height (um)
         t_pcm=0.150,       # Sb2S3 PCM thickness (um)
-        l_tip=0.350,       # Raised-cosine adiabatic PCM taper length per side (um)
+        l_tip=0.380,       # Raised-cosine adiabatic PCM taper length per side (um)
         w_tip=0.020,       # Lithographic tip width (um)
         l_in=0.350,        # Input lead length (um)
-        l_bend=1.300,      # Cosine S-bend fanout length for WG2 (um)
+        l_bend=1.050,      # Fast-decoupling cosine S-bend fanout length for WG2 (um)
         y_pitch=0.560,     # Output port pitch (um)
         l_out=0.350,       # Output lead length (um)
         iso_buf=0.100,     # Lateral cell isolation buffer (um)
@@ -320,7 +320,7 @@ def run_straight_through_dc(
 # Both States Runner
 # ─────────────────────────────────────────────────────────────────────────────
 
-def run_both_states(l_c=4.60, gap=0.100, resolution=20, **kwargs):
+def run_both_states(l_c=4.25, gap=0.100, resolution=20, **kwargs):
     print(f"\n{'#'*72}")
     print(f"STRAIGHT-THROUGH DUAL-STATE VERIFICATION: L_c={l_c:.2f}um, gap={gap*1000:.0f}nm, res={resolution}")
     print(f"{'#'*72}\n")
@@ -371,7 +371,7 @@ def run_both_states(l_c=4.60, gap=0.100, resolution=20, **kwargs):
 # Parameter Sweep
 # ─────────────────────────────────────────────────────────────────────────────
 
-def run_sweep(lc_min=4.40, lc_max=4.80, lc_step=0.10,
+def run_sweep(lc_min=4.10, lc_max=4.40, lc_step=0.10,
               gap_list=None, resolution=20):
     if gap_list is None:
         gap_list = [0.100]
@@ -433,12 +433,12 @@ def run_sweep(lc_min=4.40, lc_max=4.80, lc_step=0.10,
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="PROJECT JANUS: Straight-Through 1x2 DC Switch 3D MEEP")
     parser.add_argument("--state", default="both", choices=["amorphous", "crystalline", "both"])
-    parser.add_argument("--lc", type=float, default=4.60, help="Straight coupling length (um)")
+    parser.add_argument("--lc", type=float, default=4.25, help="Straight coupling length (um)")
     parser.add_argument("--gap", type=float, default=0.100, help="Evanescent gap (um)")
     parser.add_argument("--resolution", type=int, default=20, help="FDTD grid resolution (px/um)")
     parser.add_argument("--sweep", action="store_true", help="Run parameter sweep")
-    parser.add_argument("--lc_min", type=float, default=4.40, help="Sweep: min L_c (um)")
-    parser.add_argument("--lc_max", type=float, default=4.80, help="Sweep: max L_c (um)")
+    parser.add_argument("--lc_min", type=float, default=4.10, help="Sweep: min L_c (um)")
+    parser.add_argument("--lc_max", type=float, default=4.40, help="Sweep: max L_c (um)")
     parser.add_argument("--lc_step", type=float, default=0.10, help="Sweep: L_c step (um)")
     parser.add_argument("--gaps", type=float, nargs="+", default=[0.100], help="Sweep: list of gaps (um)")
     args = parser.parse_args()
