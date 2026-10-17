@@ -1,0 +1,622 @@
+[
+  {
+    "valid": true,
+    "all_passed": true,
+    "w_wg_nm": 240,
+    "gap_nm": 18,
+    "L_c_um": 2.559,
+    "kappa_rad_um": 0.6137,
+    "l_bend_um": 0.38,
+    "y_pitch_out_um": 0.34,
+    "l_ext_nm": 450,
+    "l_in_um": 0.15,
+    "l_out_um": 0.15,
+    "iso_buffer_um": 0.08,
+    "cell_len_um": 3.239,
+    "cell_w_um": 0.5,
+    "cell_area_um2": 1.62,
+    "fabric_area_mm2": 6.37,
+    "area_saving_pct": 86.5,
+    "amorphous": {
+      "trans_pct": 98.81,
+      "il_db": 0.0521,
+      "xt_db": -22.57,
+      "scr": 180.8
+    },
+    "crystalline": {
+      "trans_pct": 98.79,
+      "il_db": 0.0529,
+      "xt_db": -22.62,
+      "scr": 182.7
+    }
+  },
+  {
+    "valid": true,
+    "all_passed": true,
+    "w_wg_nm": 240,
+    "gap_nm": 18,
+    "L_c_um": 2.559,
+    "kappa_rad_um": 0.6137,
+    "l_bend_um": 0.38,
+    "y_pitch_out_um": 0.34,
+    "l_ext_nm": 400,
+    "l_in_um": 0.15,
+    "l_out_um": 0.15,
+    "iso_buffer_um": 0.08,
+    "cell_len_um": 3.239,
+    "cell_w_um": 0.5,
+    "cell_area_um2": 1.62,
+    "fabric_area_mm2": 6.37,
+    "area_saving_pct": 86.5,
+    "amorphous": {
+      "trans_pct": 98.81,
+      "il_db": 0.0521,
+      "xt_db": -22.57,
+      "scr": 180.8
+    },
+    "crystalline": {
+      "trans_pct": 98.75,
+      "il_db": 0.0545,
+      "xt_db": -22.34,
+      "scr": 171.2
+    }
+  },
+  {
+    "valid": true,
+    "all_passed": true,
+    "w_wg_nm": 240,
+    "gap_nm": 18,
+    "L_c_um": 2.559,
+    "kappa_rad_um": 0.6137,
+    "l_bend_um": 0.38,
+    "y_pitch_out_um": 0.34,
+    "l_ext_nm": 350,
+    "l_in_um": 0.15,
+    "l_out_um": 0.15,
+    "iso_buffer_um": 0.08,
+    "cell_len_um": 3.239,
+    "cell_w_um": 0.5,
+    "cell_area_um2": 1.62,
+    "fabric_area_mm2": 6.37,
+    "area_saving_pct": 86.5,
+    "amorphous": {
+      "trans_pct": 98.81,
+      "il_db": 0.0521,
+      "xt_db": -22.57,
+      "scr": 180.8
+    },
+    "crystalline": {
+      "trans_pct": 98.72,
+      "il_db": 0.0562,
+      "xt_db": -22.05,
+      "scr": 160.2
+    }
+  },
+  {
+    "valid": true,
+    "all_passed": true,
+    "w_wg_nm": 230,
+    "gap_nm": 18,
+    "L_c_um": 2.571,
+    "kappa_rad_um": 0.6109,
+    "l_bend_um": 0.38,
+    "y_pitch_out_um": 0.34,
+    "l_ext_nm": 450,
+    "l_in_um": 0.15,
+    "l_out_um": 0.15,
+    "iso_buffer_um": 0.08,
+    "cell_len_um": 3.251,
+    "cell_w_um": 0.5,
+    "cell_area_um2": 1.626,
+    "fabric_area_mm2": 6.39,
+    "area_saving_pct": 86.5,
+    "amorphous": {
+      "trans_pct": 98.81,
+      "il_db": 0.0521,
+      "xt_db": -22.57,
+      "scr": 180.8
+    },
+    "crystalline": {
+      "trans_pct": 98.79,
+      "il_db": 0.0528,
+      "xt_db": -22.64,
+      "scr": 183.9
+    }
+  },
+  {
+    "valid": true,
+    "all_passed": true,
+    "w_wg_nm": 230,
+    "gap_nm": 18,
+    "L_c_um": 2.571,
+    "kappa_rad_um": 0.6109,
+    "l_bend_um": 0.38,
+    "y_pitch_out_um": 0.34,
+    "l_ext_nm": 400,
+    "l_in_um": 0.15,
+    "l_out_um": 0.15,
+    "iso_buffer_um": 0.08,
+    "cell_len_um": 3.251,
+    "cell_w_um": 0.5,
+    "cell_area_um2": 1.626,
+    "fabric_area_mm2": 6.39,
+    "area_saving_pct": 86.5,
+    "amorphous": {
+      "trans_pct": 98.81,
+      "il_db": 0.0521,
+      "xt_db": -22.57,
+      "scr": 180.8
+    },
+    "crystalline": {
+      "trans_pct": 98.76,
+      "il_db": 0.0543,
+      "xt_db": -22.37,
+      "scr": 172.4
+    }
+  },
+  {
+    "valid": true,
+    "all_passed": true,
+    "w_wg_nm": 230,
+    "gap_nm": 18,
+    "L_c_um": 2.571,
+    "kappa_rad_um": 0.6109,
+    "l_bend_um": 0.38,
+    "y_pitch_out_um": 0.34,
+    "l_ext_nm": 350,
+    "l_in_um": 0.15,
+    "l_out_um": 0.15,
+    "iso_buffer_um": 0.08,
+    "cell_len_um": 3.251,
+    "cell_w_um": 0.5,
+    "cell_area_um2": 1.626,
+    "fabric_area_mm2": 6.39,
+    "area_saving_pct": 86.5,
+    "amorphous": {
+      "trans_pct": 98.81,
+      "il_db": 0.0521,
+      "xt_db": -22.57,
+      "scr": 180.8
+    },
+    "crystalline": {
+      "trans_pct": 98.72,
+      "il_db": 0.056,
+      "xt_db": -22.08,
+      "scr": 161.4
+    }
+  },
+  {
+    "valid": true,
+    "all_passed": true,
+    "w_wg_nm": 240,
+    "gap_nm": 20,
+    "L_c_um": 2.582,
+    "kappa_rad_um": 0.6085,
+    "l_bend_um": 0.38,
+    "y_pitch_out_um": 0.34,
+    "l_ext_nm": 450,
+    "l_in_um": 0.15,
+    "l_out_um": 0.15,
+    "iso_buffer_um": 0.08,
+    "cell_len_um": 3.262,
+    "cell_w_um": 0.5,
+    "cell_area_um2": 1.631,
+    "fabric_area_mm2": 6.41,
+    "area_saving_pct": 86.5,
+    "amorphous": {
+      "trans_pct": 98.81,
+      "il_db": 0.0521,
+      "xt_db": -22.57,
+      "scr": 180.8
+    },
+    "crystalline": {
+      "trans_pct": 98.8,
+      "il_db": 0.0526,
+      "xt_db": -22.67,
+      "scr": 184.9
+    }
+  },
+  {
+    "valid": true,
+    "all_passed": true,
+    "w_wg_nm": 240,
+    "gap_nm": 20,
+    "L_c_um": 2.582,
+    "kappa_rad_um": 0.6085,
+    "l_bend_um": 0.38,
+    "y_pitch_out_um": 0.34,
+    "l_ext_nm": 400,
+    "l_in_um": 0.15,
+    "l_out_um": 0.15,
+    "iso_buffer_um": 0.08,
+    "cell_len_um": 3.262,
+    "cell_w_um": 0.5,
+    "cell_area_um2": 1.631,
+    "fabric_area_mm2": 6.41,
+    "area_saving_pct": 86.5,
+    "amorphous": {
+      "trans_pct": 98.81,
+      "il_db": 0.0521,
+      "xt_db": -22.57,
+      "scr": 180.8
+    },
+    "crystalline": {
+      "trans_pct": 98.76,
+      "il_db": 0.0541,
+      "xt_db": -22.39,
+      "scr": 173.5
+    }
+  },
+  {
+    "valid": true,
+    "all_passed": true,
+    "w_wg_nm": 240,
+    "gap_nm": 20,
+    "L_c_um": 2.582,
+    "kappa_rad_um": 0.6085,
+    "l_bend_um": 0.38,
+    "y_pitch_out_um": 0.34,
+    "l_ext_nm": 350,
+    "l_in_um": 0.15,
+    "l_out_um": 0.15,
+    "iso_buffer_um": 0.08,
+    "cell_len_um": 3.262,
+    "cell_w_um": 0.5,
+    "cell_area_um2": 1.631,
+    "fabric_area_mm2": 6.41,
+    "area_saving_pct": 86.5,
+    "amorphous": {
+      "trans_pct": 98.81,
+      "il_db": 0.0521,
+      "xt_db": -22.57,
+      "scr": 180.8
+    },
+    "crystalline": {
+      "trans_pct": 98.72,
+      "il_db": 0.0558,
+      "xt_db": -22.11,
+      "scr": 162.5
+    }
+  },
+  {
+    "valid": true,
+    "all_passed": true,
+    "w_wg_nm": 230,
+    "gap_nm": 20,
+    "L_c_um": 2.592,
+    "kappa_rad_um": 0.606,
+    "l_bend_um": 0.38,
+    "y_pitch_out_um": 0.34,
+    "l_ext_nm": 450,
+    "l_in_um": 0.15,
+    "l_out_um": 0.15,
+    "iso_buffer_um": 0.08,
+    "cell_len_um": 3.272,
+    "cell_w_um": 0.5,
+    "cell_area_um2": 1.636,
+    "fabric_area_mm2": 6.43,
+    "area_saving_pct": 86.4,
+    "amorphous": {
+      "trans_pct": 98.81,
+      "il_db": 0.0521,
+      "xt_db": -22.57,
+      "scr": 180.8
+    },
+    "crystalline": {
+      "trans_pct": 98.8,
+      "il_db": 0.0525,
+      "xt_db": -22.69,
+      "scr": 185.9
+    }
+  },
+  {
+    "valid": true,
+    "all_passed": true,
+    "w_wg_nm": 230,
+    "gap_nm": 20,
+    "L_c_um": 2.592,
+    "kappa_rad_um": 0.606,
+    "l_bend_um": 0.38,
+    "y_pitch_out_um": 0.34,
+    "l_ext_nm": 400,
+    "l_in_um": 0.15,
+    "l_out_um": 0.15,
+    "iso_buffer_um": 0.08,
+    "cell_len_um": 3.272,
+    "cell_w_um": 0.5,
+    "cell_area_um2": 1.636,
+    "fabric_area_mm2": 6.43,
+    "area_saving_pct": 86.4,
+    "amorphous": {
+      "trans_pct": 98.81,
+      "il_db": 0.0521,
+      "xt_db": -22.57,
+      "scr": 180.8
+    },
+    "crystalline": {
+      "trans_pct": 98.76,
+      "il_db": 0.054,
+      "xt_db": -22.42,
+      "scr": 174.6
+    }
+  },
+  {
+    "valid": true,
+    "all_passed": true,
+    "w_wg_nm": 230,
+    "gap_nm": 20,
+    "L_c_um": 2.592,
+    "kappa_rad_um": 0.606,
+    "l_bend_um": 0.38,
+    "y_pitch_out_um": 0.34,
+    "l_ext_nm": 350,
+    "l_in_um": 0.15,
+    "l_out_um": 0.15,
+    "iso_buffer_um": 0.08,
+    "cell_len_um": 3.272,
+    "cell_w_um": 0.5,
+    "cell_area_um2": 1.636,
+    "fabric_area_mm2": 6.43,
+    "area_saving_pct": 86.4,
+    "amorphous": {
+      "trans_pct": 98.81,
+      "il_db": 0.0521,
+      "xt_db": -22.57,
+      "scr": 180.8
+    },
+    "crystalline": {
+      "trans_pct": 98.73,
+      "il_db": 0.0556,
+      "xt_db": -22.14,
+      "scr": 163.5
+    }
+  },
+  {
+    "valid": true,
+    "all_passed": true,
+    "w_wg_nm": 240,
+    "gap_nm": 18,
+    "L_c_um": 2.559,
+    "kappa_rad_um": 0.6137,
+    "l_bend_um": 0.42,
+    "y_pitch_out_um": 0.34,
+    "l_ext_nm": 450,
+    "l_in_um": 0.15,
+    "l_out_um": 0.15,
+    "iso_buffer_um": 0.08,
+    "cell_len_um": 3.279,
+    "cell_w_um": 0.5,
+    "cell_area_um2": 1.64,
+    "fabric_area_mm2": 6.45,
+    "area_saving_pct": 86.4,
+    "amorphous": {
+      "trans_pct": 98.81,
+      "il_db": 0.0521,
+      "xt_db": -22.57,
+      "scr": 180.8
+    },
+    "crystalline": {
+      "trans_pct": 98.79,
+      "il_db": 0.0529,
+      "xt_db": -22.62,
+      "scr": 182.7
+    }
+  },
+  {
+    "valid": true,
+    "all_passed": true,
+    "w_wg_nm": 240,
+    "gap_nm": 18,
+    "L_c_um": 2.559,
+    "kappa_rad_um": 0.6137,
+    "l_bend_um": 0.42,
+    "y_pitch_out_um": 0.34,
+    "l_ext_nm": 400,
+    "l_in_um": 0.15,
+    "l_out_um": 0.15,
+    "iso_buffer_um": 0.08,
+    "cell_len_um": 3.279,
+    "cell_w_um": 0.5,
+    "cell_area_um2": 1.64,
+    "fabric_area_mm2": 6.45,
+    "area_saving_pct": 86.4,
+    "amorphous": {
+      "trans_pct": 98.81,
+      "il_db": 0.0521,
+      "xt_db": -22.57,
+      "scr": 180.8
+    },
+    "crystalline": {
+      "trans_pct": 98.75,
+      "il_db": 0.0545,
+      "xt_db": -22.34,
+      "scr": 171.2
+    }
+  },
+  {
+    "valid": true,
+    "all_passed": true,
+    "w_wg_nm": 240,
+    "gap_nm": 18,
+    "L_c_um": 2.559,
+    "kappa_rad_um": 0.6137,
+    "l_bend_um": 0.42,
+    "y_pitch_out_um": 0.34,
+    "l_ext_nm": 350,
+    "l_in_um": 0.15,
+    "l_out_um": 0.15,
+    "iso_buffer_um": 0.08,
+    "cell_len_um": 3.279,
+    "cell_w_um": 0.5,
+    "cell_area_um2": 1.64,
+    "fabric_area_mm2": 6.45,
+    "area_saving_pct": 86.4,
+    "amorphous": {
+      "trans_pct": 98.81,
+      "il_db": 0.0521,
+      "xt_db": -22.57,
+      "scr": 180.8
+    },
+    "crystalline": {
+      "trans_pct": 98.72,
+      "il_db": 0.0562,
+      "xt_db": -22.05,
+      "scr": 160.2
+    }
+  },
+  {
+    "valid": true,
+    "all_passed": true,
+    "w_wg_nm": 240,
+    "gap_nm": 22,
+    "L_c_um": 2.604,
+    "kappa_rad_um": 0.6032,
+    "l_bend_um": 0.38,
+    "y_pitch_out_um": 0.34,
+    "l_ext_nm": 450,
+    "l_in_um": 0.15,
+    "l_out_um": 0.15,
+    "iso_buffer_um": 0.08,
+    "cell_len_um": 3.284,
+    "cell_w_um": 0.5,
+    "cell_area_um2": 1.642,
+    "fabric_area_mm2": 6.46,
+    "area_saving_pct": 86.4,
+    "amorphous": {
+      "trans_pct": 98.81,
+      "il_db": 0.0521,
+      "xt_db": -22.57,
+      "scr": 180.8
+    },
+    "crystalline": {
+      "trans_pct": 98.8,
+      "il_db": 0.0524,
+      "xt_db": -22.72,
+      "scr": 187.1
+    }
+  },
+  {
+    "valid": true,
+    "all_passed": true,
+    "w_wg_nm": 240,
+    "gap_nm": 22,
+    "L_c_um": 2.604,
+    "kappa_rad_um": 0.6032,
+    "l_bend_um": 0.38,
+    "y_pitch_out_um": 0.34,
+    "l_ext_nm": 400,
+    "l_in_um": 0.15,
+    "l_out_um": 0.15,
+    "iso_buffer_um": 0.08,
+    "cell_len_um": 3.284,
+    "cell_w_um": 0.5,
+    "cell_area_um2": 1.642,
+    "fabric_area_mm2": 6.46,
+    "area_saving_pct": 86.4,
+    "amorphous": {
+      "trans_pct": 98.81,
+      "il_db": 0.0521,
+      "xt_db": -22.57,
+      "scr": 180.8
+    },
+    "crystalline": {
+      "trans_pct": 98.77,
+      "il_db": 0.0538,
+      "xt_db": -22.45,
+      "scr": 175.8
+    }
+  },
+  {
+    "valid": true,
+    "all_passed": true,
+    "w_wg_nm": 240,
+    "gap_nm": 22,
+    "L_c_um": 2.604,
+    "kappa_rad_um": 0.6032,
+    "l_bend_um": 0.38,
+    "y_pitch_out_um": 0.34,
+    "l_ext_nm": 350,
+    "l_in_um": 0.15,
+    "l_out_um": 0.15,
+    "iso_buffer_um": 0.08,
+    "cell_len_um": 3.284,
+    "cell_w_um": 0.5,
+    "cell_area_um2": 1.642,
+    "fabric_area_mm2": 6.46,
+    "area_saving_pct": 86.4,
+    "amorphous": {
+      "trans_pct": 98.81,
+      "il_db": 0.0521,
+      "xt_db": -22.57,
+      "scr": 180.8
+    },
+    "crystalline": {
+      "trans_pct": 98.73,
+      "il_db": 0.0554,
+      "xt_db": -22.17,
+      "scr": 164.8
+    }
+  },
+  {
+    "valid": true,
+    "all_passed": true,
+    "w_wg_nm": 230,
+    "gap_nm": 22,
+    "L_c_um": 2.613,
+    "kappa_rad_um": 0.6012,
+    "l_bend_um": 0.38,
+    "y_pitch_out_um": 0.34,
+    "l_ext_nm": 450,
+    "l_in_um": 0.15,
+    "l_out_um": 0.15,
+    "iso_buffer_um": 0.08,
+    "cell_len_um": 3.293,
+    "cell_w_um": 0.5,
+    "cell_area_um2": 1.646,
+    "fabric_area_mm2": 6.47,
+    "area_saving_pct": 86.3,
+    "amorphous": {
+      "trans_pct": 98.81,
+      "il_db": 0.0521,
+      "xt_db": -22.57,
+      "scr": 180.8
+    },
+    "crystalline": {
+      "trans_pct": 98.8,
+      "il_db": 0.0523,
+      "xt_db": -22.74,
+      "scr": 188.0
+    }
+  },
+  {
+    "valid": true,
+    "all_passed": true,
+    "w_wg_nm": 230,
+    "gap_nm": 18,
+    "L_c_um": 2.571,
+    "kappa_rad_um": 0.6109,
+    "l_bend_um": 0.42,
+    "y_pitch_out_um": 0.34,
+    "l_ext_nm": 450,
+    "l_in_um": 0.15,
+    "l_out_um": 0.15,
+    "iso_buffer_um": 0.08,
+    "cell_len_um": 3.291,
+    "cell_w_um": 0.5,
+    "cell_area_um2": 1.646,
+    "fabric_area_mm2": 6.47,
+    "area_saving_pct": 86.3,
+    "amorphous": {
+      "trans_pct": 98.81,
+      "il_db": 0.0521,
+      "xt_db": -22.57,
+      "scr": 180.8
+    },
+    "crystalline": {
+      "trans_pct": 98.79,
+      "il_db": 0.0528,
+      "xt_db": -22.64,
+      "scr": 183.9
+    }
+  }
+]
