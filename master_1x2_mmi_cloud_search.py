@@ -53,15 +53,17 @@ class SingleCavity1x2MMI:
     """
     def __init__(
         self,
-        w_mmi: float = 1.00,       # um (MMI cavity width)
-        l_mmi: float = 2.80,       # um (MMI cavity length)
+        w_mmi: float = 0.88,       # um (MMI cavity width, strictly TMI regime)
+        l_mmi: float = 2.70,       # um (MMI cavity length)
         w_wg: float = 0.250,       # um (Access waveguide width)
         h_wg: float = 0.220,       # um (Silicon core height)
-        y_port: float = 0.250,     # um (Output port center offset, +/- y_port)
-        t_pcm: float = 0.030,      # um (Sb2S3 thickness, 20-150 nm)
-        l_pcm: float = 1.80,       # um (Sb2S3 patch length)
-        w_pcm: float = 0.500,      # um (Sb2S3 patch width)
-        y_pcm_center: float = 0.250, # um (Sb2S3 patch lateral center, y > 0 for asymmetry)
+        w_tap: float = 0.380,      # um (Adiabatic taper width at MMI junction)
+        l_tap: float = 0.300,      # um (Adiabatic taper length)
+        y_port: float = 0.260,     # um (Output port center offset, +/- y_port)
+        t_pcm: float = 0.150,      # um (Sb2S3 thickness, 100-180 nm)
+        l_pcm: float = 2.50,       # um (Sb2S3 patch length)
+        w_pcm: float = 0.440,      # um (Sb2S3 patch width)
+        y_pcm_center: float = 0.220, # um (Sb2S3 patch lateral center, y > 0 for asymmetry)
         l_in: float = 0.350,       # um (Input access lead length)
         l_out: float = 0.350,      # um (Output access lead length)
         input_type: str = "offset" # "offset" (at +y_port) or "center" (at y = 0)
@@ -74,6 +76,8 @@ class SingleCavity1x2MMI:
         self.l_mmi = l_mmi
         self.w_wg = w_wg
         self.h_wg = h_wg
+        self.w_tap = w_tap
+        self.l_tap = l_tap
         self.y_port = y_port
         self.t_pcm = t_pcm
         self.l_pcm = l_pcm
@@ -92,7 +96,7 @@ class SingleCavity1x2MMI:
         self.k_pcm_cr = 8.0e-5
 
         # Footprint calculations
-        self.total_length = self.l_in + self.l_mmi + self.l_out
+        self.total_length = self.l_in + 2.0 * self.l_tap + self.l_mmi + self.l_out
         self.total_width = max(self.w_mmi, 2.0 * self.y_port + self.w_wg) + 0.30
         self.footprint_area = self.total_length * self.total_width
         self.mmi_core_area = self.l_mmi * self.w_mmi
@@ -187,6 +191,8 @@ class SingleCavity1x2MMI:
         x_right = sx / 2.0
         x_mmi_start = -self.l_mmi / 2.0
         x_mmi_end = self.l_mmi / 2.0
+        x_tap_in = x_mmi_start - self.l_tap
+        x_tap_out = x_mmi_end + self.l_tap
 
         y_in = self.y_port if self.input_type == "offset" else 0.0
 
@@ -203,7 +209,7 @@ class SingleCavity1x2MMI:
         ]
 
         # Flux monitor positions
-        x_mon = x_mmi_end + 0.15
+        x_mon = x_tap_out + 0.15
         mon_w = min(0.260, 2.0 * self.y_port - 0.040)
         mon_h = 0.280
 
@@ -221,37 +227,73 @@ class SingleCavity1x2MMI:
         sim_ref.run(until_after_sources=mp.stop_when_fields_decayed(15, mp.Hz, mp.Vector3(x_mon, y_in, self.h_wg/2.0), 1e-3))
         p_ref = max(mp.get_fluxes(flux_ref)[0], 1e-12)
 
-        # 2. Single-Cavity 1x2 MMI Switch Structure
+        # 2. Single-Cavity 1x2 TMI Switch Structure with Adiabatic Tapers
         geom = [
             mp.Block(center=mp.Vector3(0, 0, -sz/4.0), size=mp.Vector3(mp.inf, mp.inf, sz/2.0), material=clad_mat),
-            # Single Input Lead
+            # Input access lead (w_wg)
             mp.Block(
-                center=mp.Vector3((x_left + x_mmi_start)/2.0, y_in, self.h_wg/2.0),
-                size=mp.Vector3(x_mmi_start - x_left, self.w_wg, self.h_wg),
+                center=mp.Vector3((x_left + x_tap_in)/2.0, y_in, self.h_wg/2.0),
+                size=mp.Vector3(x_tap_in - x_left, self.w_wg, self.h_wg),
                 material=core_mat
             ),
-            # Multimode Cavity Body
+            # Input adiabatic taper (w_wg -> w_tap)
+            mp.Prism(
+                vertices=[
+                    mp.Vector3(x_tap_in, y_in - self.w_wg / 2.0),
+                    mp.Vector3(x_mmi_start, y_in - self.w_tap / 2.0),
+                    mp.Vector3(x_mmi_start, y_in + self.w_tap / 2.0),
+                    mp.Vector3(x_tap_in, y_in + self.w_wg / 2.0)
+                ],
+                height=self.h_wg,
+                axis=mp.Vector3(0, 0, 1),
+                material=core_mat
+            ),
+            # Multimode Cavity Body (Two-Mode Interference)
             mp.Block(
                 center=mp.Vector3(0, 0, self.h_wg/2.0),
                 size=mp.Vector3(self.l_mmi, self.w_mmi, self.h_wg),
                 material=core_mat
             ),
-            # Asymmetric Sb2S3 Patch atop MMI
+            # Asymmetric Sb2S3 Patch atop MMI upper half
             mp.Block(
                 center=mp.Vector3(0, self.y_pcm_center, self.h_wg + self.t_pcm / 2.0),
                 size=mp.Vector3(self.l_pcm, self.w_pcm, self.t_pcm),
                 material=pcm_mat
             ),
+            # Output Port 1 Taper (w_tap -> w_wg at +y_port)
+            mp.Prism(
+                vertices=[
+                    mp.Vector3(x_mmi_end, self.y_port - self.w_tap / 2.0),
+                    mp.Vector3(x_tap_out, self.y_port - self.w_wg / 2.0),
+                    mp.Vector3(x_tap_out, self.y_port + self.w_wg / 2.0),
+                    mp.Vector3(x_mmi_end, self.y_port + self.w_tap / 2.0)
+                ],
+                height=self.h_wg,
+                axis=mp.Vector3(0, 0, 1),
+                material=core_mat
+            ),
+            # Output Port 2 Taper (w_tap -> w_wg at -y_port)
+            mp.Prism(
+                vertices=[
+                    mp.Vector3(x_mmi_end, -self.y_port - self.w_tap / 2.0),
+                    mp.Vector3(x_tap_out, -self.y_port - self.w_wg / 2.0),
+                    mp.Vector3(x_tap_out, -self.y_port + self.w_wg / 2.0),
+                    mp.Vector3(x_mmi_end, -self.y_port + self.w_tap / 2.0)
+                ],
+                height=self.h_wg,
+                axis=mp.Vector3(0, 0, 1),
+                material=core_mat
+            ),
             # Output Port 1 Lead (+y_port, Bar)
             mp.Block(
-                center=mp.Vector3((x_mmi_end + x_right)/2.0, self.y_port, self.h_wg/2.0),
-                size=mp.Vector3(x_right - x_mmi_end, self.w_wg, self.h_wg),
+                center=mp.Vector3((x_tap_out + x_right)/2.0, self.y_port, self.h_wg/2.0),
+                size=mp.Vector3(x_right - x_tap_out, self.w_wg, self.h_wg),
                 material=core_mat
             ),
             # Output Port 2 Lead (-y_port, Cross)
             mp.Block(
-                center=mp.Vector3((x_mmi_end + x_right)/2.0, -self.y_port, self.h_wg/2.0),
-                size=mp.Vector3(x_right - x_mmi_end, self.w_wg, self.h_wg),
+                center=mp.Vector3((x_tap_out + x_right)/2.0, -self.y_port, self.h_wg/2.0),
+                size=mp.Vector3(x_right - x_tap_out, self.w_wg, self.h_wg),
                 material=core_mat
             )
         ]
@@ -374,32 +416,32 @@ def evaluate_single_config_worker(args_tuple) -> Dict[str, Any]:
 
 def generate_search_space(quick: bool = False) -> List[Dict[str, Any]]:
     """
-    Generates the discrete grid of candidate parameters for the Single-Cavity 1x2 MMI.
+    Generates the discrete grid of candidate parameters for the Single-Cavity 1x2 TMI Switch.
     """
     if quick:
-        w_mmi_list = [0.80, 0.90, 1.00]
-        l_mmi_list = [2.20, 2.60, 3.00]
-        y_port_list = [0.220, 0.250]
-        t_pcm_list = [0.100, 0.150]
-        l_pcm_list = [1.80, 2.20, 2.60]
+        w_mmi_list = [0.85, 0.88]
+        l_mmi_list = [2.60, 2.80]
+        y_port_list = [0.260]
+        t_pcm_list = [0.150]
+        l_pcm_list = [2.40, 2.60]
     else:
-        # Full exploratory space targeting Sub-2.0 to Sub-5.0 um^2
-        w_mmi_list = [0.75, 0.80, 0.85, 0.90, 1.00, 1.10]
-        l_mmi_list = [2.00, 2.30, 2.60, 2.90, 3.20, 3.50]
-        y_port_list = [0.200, 0.220, 0.250, 0.275]
-        t_pcm_list = [0.080, 0.100, 0.120, 0.150]
-        l_pcm_list = [1.60, 2.00, 2.40, 2.70]
+        # Calibrated TMI exploratory space (Strictly 2-mode cavity)
+        w_mmi_list = [0.82, 0.85, 0.88, 0.92, 0.96]
+        l_mmi_list = [2.40, 2.60, 2.80, 3.00, 3.20]
+        y_port_list = [0.240, 0.260, 0.280]
+        t_pcm_list = [0.120, 0.150, 0.180]
+        l_pcm_list = [2.20, 2.40, 2.60, 2.80]
 
     grid = []
     for w in w_mmi_list:
         for l in l_mmi_list:
             for y_p in y_port_list:
-                if y_p >= w / 2.0:
-                    continue  # Port must be inside the MMI boundary
+                if y_p >= w / 2.0 - 0.05:
+                    continue  # Port must be safely inside the MMI boundary with cladding margin
                 for t in t_pcm_list:
                     for l_p in l_pcm_list:
                         if l_p >= l:
-                            continue  # Patch must be shorter than MMI cavity
+                            continue  # Patch must fit on the MMI cavity
                         grid.append({
                             "w_mmi": w,
                             "l_mmi": l,
@@ -409,6 +451,8 @@ def generate_search_space(quick: bool = False) -> List[Dict[str, Any]]:
                             "w_pcm": w / 2.0,
                             "y_pcm_center": w / 4.0,
                             "w_wg": 0.250,
+                            "w_tap": 0.380,
+                            "l_tap": 0.300,
                             "input_type": "offset"
                         })
     return grid
