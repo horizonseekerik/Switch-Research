@@ -13,7 +13,12 @@ Verifies:
 
 import sys
 import os
-import pytest
+
+try:
+    import pytest
+    HAS_PYTEST = True
+except ImportError:
+    HAS_PYTEST = False
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from sub5um_switch_meep import Sub5umSwitchCellMeep, HAS_MEEP
@@ -101,9 +106,12 @@ def test_supermode_eigensolver():
     assert 3.50 <= lc <= 4.60, f"Baseline coupling length {lc:.3f} um deviated from expected range (3.5 - 4.6 um)!"
 
 
-@pytest.mark.skipif(not HAS_MEEP, reason="MIT MEEP not installed in current environment")
 def test_meep_fdtd_smoke_execution():
     """Verify that full-wave MEEP Maxwell FDTD initializes and executes cleanly."""
+    if not HAS_MEEP:
+        if HAS_PYTEST:
+            pytest.skip("MIT MEEP not installed in current environment")
+        return
     sw = Sub5umSwitchCellMeep(
         w_wg=0.250, gap=0.045, l_c=2.400, l_bend=0.950,
         y_pitch_out=0.600, resolution=15
@@ -114,3 +122,41 @@ def test_meep_fdtd_smoke_execution():
     assert 0.0 < res["power_cross_p2"] <= 1.0
     assert 0.0 <= res["power_bar_p1"] <= 1.0
     assert res["power_bar_p1"] + res["power_cross_p2"] <= 1.01
+
+
+if __name__ == "__main__":
+    print("=" * 75)
+    print("PROJECT JANUS: STANDALONE TEST RUNNER FOR SUB-5 um^2 SWITCH SUITE")
+    print("=" * 75)
+    tests = [
+        ("Footprint (< 5.0 um^2)", test_footprint_strict_sub_5um2),
+        ("3D Footprint Consistency", test_footprint_strict_sub_5um2_3d),
+        ("Amorphous Optical Metrics", test_amorphous_state_optical_metrics),
+        ("Crystalline Optical Metrics", test_crystalline_state_optical_metrics),
+        ("Passive Energy Conservation", test_energy_conservation),
+        ("Die Budget Reduction", test_processor_level_die_budget_reduction),
+        ("Supermode Eigensolver", test_supermode_eigensolver),
+        ("MEEP FDTD Smoke Execution", test_meep_fdtd_smoke_execution),
+    ]
+
+    passed = 0
+    skipped = 0
+    failed = 0
+
+    for name, test_fn in tests:
+        if test_fn == test_meep_fdtd_smoke_execution and not HAS_MEEP:
+            print(f"  [SKIP] {name:<32} (MEEP not installed in this environment)")
+            skipped += 1
+            continue
+        try:
+            test_fn()
+            print(f"  [PASS] {name:<32}")
+            passed += 1
+        except Exception as e:
+            print(f"  [FAIL] {name:<32} -> {e}")
+            failed += 1
+
+    print("-" * 75)
+    print(f"SUMMARY: {passed} passed, {skipped} skipped, {failed} failed")
+    print("=" * 75)
+    sys.exit(1 if failed > 0 else 0)

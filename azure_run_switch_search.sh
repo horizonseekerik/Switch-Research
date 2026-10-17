@@ -65,8 +65,13 @@ python3 "${SCRIPT_DIR}/azure_4cpu_grid_search.py" --cpus "${NUM_CPUS}" --output-
 
 # Run automated verification suite
 echo ""
-echo "[INFO] Running verification pytest suite..."
-python3 -m pytest "${SCRIPT_DIR}/test_sub5um_switch.py" -v
+echo "[INFO] Running verification test suite..."
+if python3 -c "import pytest" 2>/dev/null; then
+    python3 -m pytest "${SCRIPT_DIR}/test_sub5um_switch.py" -v
+else
+    echo "[INFO] pytest not installed, executing suite via standalone test runner..."
+    python3 "${SCRIPT_DIR}/test_sub5um_switch.py"
+fi
 
 # Archive results
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
