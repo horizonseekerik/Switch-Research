@@ -37,6 +37,7 @@ echo "======================================================================"
 echo "  [PRIMARY] EXECUTING 3D VECTOR MAXWELL SWITCH SIMULATION (SUB-2 um^2)"
 echo "  Target: 1.620 um^2 Cell (w=240nm, gap=18nm, L_c=2.559um, L_bend=0.38um)"
 echo "======================================================================"
+rm -f ./sub2um_3d_switch_results.json "${RESULTS_DIR}/sub2um_3d_switch_results.json"
 python sub2um_switch_3d_meep.py --state both --output-dir "${RESULTS_DIR}"
 cp "${RESULTS_DIR}/sub2um_3d_switch_results.json" ./sub2um_3d_switch_results.json
 

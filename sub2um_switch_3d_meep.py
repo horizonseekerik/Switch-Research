@@ -52,21 +52,22 @@ def make_hermite_sbend_polygon(x_start: float, x_end: float, y_start: float, y_e
 
 
 def make_apodized_pcm_polygon(x_center: float, y_center: float, l_patch: float, w_patch: float, 
-                              l_tip: float = 0.30, n_pts: int = 10):
-    """Constructs an active Sb2S3 patch polygon with parabolic entry/exit tapers."""
+                              l_tip: float = 0.30, n_pts: int = 10, w_tip: float = 0.040):
+    """Constructs an active Sb2S3 patch polygon with parabolic entry/exit tapers and non-zero lithographic tip width."""
     if not HAS_MEEP:
         return []
     x_l_tip = x_center - l_patch / 2.0
     x_l_body = x_l_tip + l_tip
     x_r_body = x_center + l_patch / 2.0 - l_tip
+    x_r_tip = x_center + l_patch / 2.0
 
     u_l = np.linspace(0, 1, n_pts)[:-1]
     xl = x_l_tip + u_l * l_tip
-    wl = w_patch * (2 * u_l - u_l**2)
+    wl = w_tip + (w_patch - w_tip) * (2 * u_l - u_l**2)
 
     u_r = np.linspace(0, 1, n_pts)[1:]
     xr = x_r_body + u_r * l_tip
-    wr = w_patch * (1.0 - u_r**2)
+    wr = w_tip + (w_patch - w_tip) * (1.0 - u_r**2)
 
     top = [mp.Vector3(xi, y_center + wi / 2.0, 0) for xi, wi in zip(xl, wl)]
     top.append(mp.Vector3(x_l_body, y_center + w_patch / 2.0, 0))
@@ -284,6 +285,8 @@ class Sub2umSwitchCell3DMeep:
         cell = mp.Vector3(sx, sy, sz)
         pml_layers = [mp.PML(dpml)]
 
+        x_left = -sx / 2.0
+        x_right = sx / 2.0
         x_min_cell = -cell_len / 2.0
         x_in_end = x_min_cell + self.l_in
         x_coupler_end = x_in_end + self.l_c
@@ -308,10 +311,10 @@ class Sub2umSwitchCell3DMeep:
             material=clad_mat
         ))
 
-        # 2. Input silicon lead on WG1
+        # 2. Input silicon lead on WG1 extending through left PML
         geometry.append(mp.Block(
-            center=mp.Vector3((x_min_cell + x_in_end) / 2.0, self.y_wg1, self.h_wg / 2.0),
-            size=mp.Vector3(self.l_in, self.w_wg, self.h_wg),
+            center=mp.Vector3((x_left + x_in_end) / 2.0, self.y_wg1, self.h_wg / 2.0),
+            size=mp.Vector3(x_in_end - x_left, self.w_wg, self.h_wg),
             material=core_mat
         ))
 
@@ -334,14 +337,16 @@ class Sub2umSwitchCell3DMeep:
             y_center=self.y_wg1,
             l_patch=self.l_patch_tot,
             w_patch=self.w_patch,
-            l_tip=0.25
+            l_tip=0.25,
+            w_tip=0.040
         )
-        z_patch_center = self.h_wg + self.t_pcm / 2.0
+        cx_patch = float(np.mean([pt.x for pt in patch_pts]))
+        cy_patch = float(np.mean([pt.y for pt in patch_pts]))
         geometry.append(mp.Prism(
             vertices=patch_pts,
             height=self.t_pcm,
             axis=mp.Vector3(0, 0, 1),
-            center=mp.Vector3(0, 0, z_patch_center),
+            center=mp.Vector3(cx_patch, cy_patch, self.h_wg + self.t_pcm / 2.0),
             material=patch_mat
         ))
 
@@ -360,27 +365,24 @@ class Sub2umSwitchCell3DMeep:
             vertices=sbend1_pts,
             height=self.h_wg,
             axis=mp.Vector3(0, 0, 1),
-            center=mp.Vector3(0, 0, self.h_wg / 2.0),
             material=core_mat
         ))
         geometry.append(mp.Prism(
             vertices=sbend2_pts,
             height=self.h_wg,
             axis=mp.Vector3(0, 0, 1),
-            center=mp.Vector3(0, 0, self.h_wg / 2.0),
             material=core_mat
         ))
 
-        # 6. Output leads
-        x_out_center = (x_bend_end + x_max_cell) / 2.0
+        # 6. Output leads extending through right PML
         geometry.append(mp.Block(
-            center=mp.Vector3(x_out_center, self.y_out1, self.h_wg / 2.0),
-            size=mp.Vector3(self.l_out, self.w_wg, self.h_wg),
+            center=mp.Vector3((x_bend_end + x_right) / 2.0, self.y_out1, self.h_wg / 2.0),
+            size=mp.Vector3(x_right - x_bend_end, self.w_wg, self.h_wg),
             material=core_mat
         ))
         geometry.append(mp.Block(
-            center=mp.Vector3(x_out_center, self.y_out2, self.h_wg / 2.0),
-            size=mp.Vector3(self.l_out, self.w_wg, self.h_wg),
+            center=mp.Vector3((x_bend_end + x_right) / 2.0, self.y_out2, self.h_wg / 2.0),
+            size=mp.Vector3(x_right - x_bend_end, self.w_wg, self.h_wg),
             material=core_mat
         ))
 
@@ -388,14 +390,14 @@ class Sub2umSwitchCell3DMeep:
         sources = [
             mp.EigenModeSource(
                 src=mp.GaussianSource(fcen, fwidth=df),
-                center=mp.Vector3(x_min_cell + 0.10, self.y_wg1, self.h_wg / 2.0),
+                center=mp.Vector3(x_left + dpml + 0.10, self.y_wg1, self.h_wg / 2.0),
                 size=mp.Vector3(0, self.w_wg * 3.0, self.h_wg * 3.0),
                 eig_band=1,
                 direction=mp.X
             )
         ]
 
-        x_mon = x_max_cell - 0.05
+        x_mon = x_bend_end + 0.15
         mon_w = self.w_wg * 2.5
         mon_h = self.h_wg * 2.5
 
