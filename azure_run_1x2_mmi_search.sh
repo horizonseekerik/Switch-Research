@@ -10,19 +10,27 @@ TIMESTAMP=$(date -u +"%Y%m%d_%H%M%S")
 RESULTS_DIR="mmi_1x2_results_${TIMESTAMP}"
 mkdir -p "${RESULTS_DIR}"
 
-# Auto-detect CPU cores (default to 4 if undetected)
-if command -v nproc > /dev/null 2>&1; then
-    CPU_CORES=$(nproc)
-else
-    CPU_CORES=4
-fi
+# CPU core configuration: user argument $1 > AZURE_CPUS env var > default 4
+SYS_CPUS=$(nproc 2>/dev/null || echo 4)
+CPU_CORES="${1:-${AZURE_CPUS:-4}}"
+
+# High-throughput multi-core process configuration
+export OMP_NUM_THREADS=1
+export MKL_NUM_THREADS=1
+export OPENBLAS_NUM_THREADS=1
+export NUMEXPR_NUM_THREADS=1
 
 echo "======================================================================"
 echo "  PROJECT JANUS: 1x2 SINGLE-CAVITY MMI SWITCH CLOUD SEARCH"
 echo "  Target: Single Multimode Body + Asymmetric Sb2S3 Patch"
 echo "  Optical Targets: IL <= 0.08 dB | Crosstalk <= -20 dB | Footprint < 5.0 um^2"
 echo "  Timestamp: $(date -u +"%Y-%m-%d %H:%M:%SZ")"
-echo "  Detected CPU Cores: ${CPU_CORES}"
+echo "  Active Parallel Workers : ${CPU_CORES} workers"
+echo "  Detected Hardware Cores : ${SYS_CPUS} vCPUs"
+if [ "${SYS_CPUS}" -lt "${CPU_CORES}" ]; then
+    echo "  [INFO] Hardware reported ${SYS_CPUS} cores; forcing ${CPU_CORES} parallel workers."
+    echo "         (If your Azure quota has 4 cores, ensure your VM size is Standard_D4s_v5 or Standard_F4s_v2)"
+fi
 echo "======================================================================"
 
 # 1. Activate conda environment if available (Miniforge, Miniconda, Anaconda)

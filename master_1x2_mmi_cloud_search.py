@@ -23,6 +23,13 @@ Usage:
 
 import sys
 import os
+
+# Optimize parallel CPU execution across multiple processes
+os.environ["OMP_NUM_THREADS"] = "1"
+os.environ["MKL_NUM_THREADS"] = "1"
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
+os.environ["NUMEXPR_NUM_THREADS"] = "1"
+
 import time
 import math
 import argparse
@@ -409,7 +416,7 @@ def generate_search_space(quick: bool = False) -> List[Dict[str, Any]]:
 
 def main():
     parser = argparse.ArgumentParser(description="Master Cloud Search for 1x2 MMI Optical Switch")
-    parser.add_argument("--cpus", type=int, default=mp_proc.cpu_count(), help="Number of parallel CPU workers")
+    parser.add_argument("--cpus", type=int, default=max(4, mp_proc.cpu_count()), help="Number of parallel CPU workers")
     parser.add_argument("--resolution", type=int, default=20, help="MEEP spatial grid resolution")
     parser.add_argument("--output-dir", type=str, default=".", help="Directory to save output files")
     parser.add_argument("--quick", action="store_true", help="Quick mode with reduced grid size")
