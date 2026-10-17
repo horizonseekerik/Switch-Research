@@ -78,19 +78,28 @@ def make_apodized_pcm_polygon(x_center: float, y_center: float, l_patch: float, 
     x_r_body = x_center + l_patch / 2.0 - l_tip
     x_r_tip = x_center + l_patch / 2.0
 
-    u = np.linspace(0, 1, n_pts)
-    xl = x_l_tip + u * l_tip
-    wl = w_patch * (2 * u - u**2)
-    xr = x_r_body + u * l_tip
-    wr = w_patch * (1.0 - u**2)
+    # Left entry parabolic taper: width 0 -> w_patch (excluding last point)
+    u_l = np.linspace(0, 1, n_pts)[:-1]
+    xl = x_l_tip + u_l * l_tip
+    wl = w_patch * (2 * u_l - u_l**2)
 
+    # Right exit parabolic taper: width w_patch -> 0 (excluding first point)
+    u_r = np.linspace(0, 1, n_pts)[1:]
+    xr = x_r_body + u_r * l_tip
+    wr = w_patch * (1.0 - u_r**2)
+
+    # Top boundary: left taper -> left body -> right body -> right taper
     top = [mp.Vector3(xi, y_center + wi / 2.0, 0) for xi, wi in zip(xl, wl)]
-    top += [mp.Vector3(x_r_body, y_center + w_patch / 2.0, 0)]
-    top += [mp.Vector3(xi, y_center + wi / 2.0, 0) for xi, wi in zip(xr, wr)]
+    top.append(mp.Vector3(x_l_body, y_center + w_patch / 2.0, 0))
+    top.append(mp.Vector3(x_r_body, y_center + w_patch / 2.0, 0))
+    top.extend([mp.Vector3(xi, y_center + wi / 2.0, 0) for xi, wi in zip(xr, wr)])
 
+    # Bottom boundary: right taper -> right body -> left body -> left taper (in reverse)
     bot = [mp.Vector3(xi, y_center - wi / 2.0, 0) for xi, wi in reversed(list(zip(xr, wr)))]
-    bot += [mp.Vector3(x_r_body, y_center - w_patch / 2.0, 0)]
-    bot += [mp.Vector3(xi, y_center - wi / 2.0, 0) for xi, wi in reversed(list(zip(xl, wl)))]
+    bot.append(mp.Vector3(x_r_body, y_center - w_patch / 2.0, 0))
+    bot.append(mp.Vector3(x_l_body, y_center - w_patch / 2.0, 0))
+    bot.extend([mp.Vector3(xi, y_center - wi / 2.0, 0) for xi, wi in reversed(list(zip(xl, wl)))])
+
     return top + bot
 
 
@@ -156,15 +165,48 @@ class Sub5umSwitchCellMeep:
         cell_area = cell_length * cell_width
         return cell_length, cell_width, cell_area
 
-    def run_simulation(self, state: str = "amorphous") -> Dict[str, Any]:
+    _cached_ref_flux: Dict[Tuple[float, float, float, float, int], float] = {}
+
+    def _get_reference_flux(self, sx: float, sy: float, dpml: float, cell: Any,
+                           sources: Any, clad_mat: Any, core_mat: Any,
+                           x_mon: float, mon_w: float) -> float:
         """
-        Executes full-wave MEEP FDTD simulation for the specified state.
+        Calculates and caches the optical power of a reference straight waveguide
+        to normalize insertion loss and transmission to absolute 0..1 scale.
+        """
+        cache_key = (round(self.w_wg, 4), round(self.lambda_0, 4), round(sx, 3), round(sy, 3), self.resolution)
+        if cache_key in Sub5umSwitchCellMeep._cached_ref_flux:
+            return Sub5umSwitchCellMeep._cached_ref_flux[cache_key]
+
+        geom_ref = [mp.Block(
+            center=mp.Vector3(0, self.y_wg1, 0),
+            size=mp.Vector3(mp.inf, self.w_wg, mp.inf),
+            material=core_mat
+        )]
+        sim_ref = mp.Simulation(
+            cell_size=cell,
+            boundary_layers=[mp.PML(dpml)],
+            geometry=geom_ref,
+            sources=sources,
+            resolution=self.resolution,
+            default_material=clad_mat
+        )
+        fcen = 1.0 / self.lambda_0
+        flux_ref = sim_ref.add_flux(fcen, 0, 1, mp.FluxRegion(center=mp.Vector3(x_mon, self.y_wg1, 0), size=mp.Vector3(0, mon_w, 0)))
+        sim_ref.run(until_after_sources=mp.stop_when_fields_decayed(25, mp.Hz, mp.Vector3(x_mon, self.y_wg1, 0), 1e-4))
+        p_ref = max(mp.get_fluxes(flux_ref)[0], 1e-12)
+        Sub5umSwitchCellMeep._cached_ref_flux[cache_key] = p_ref
+        return p_ref
+
+    def run_simulation(self, state: str = "amorphous", use_meep_if_available: bool = False) -> Dict[str, Any]:
+        """
+        Executes full-wave MEEP FDTD simulation or analytical CMT physics model.
         state: 'amorphous' (State 0 -> Cross to Port 2) or 'crystalline' (State 1 -> Bar to Port 1)
         """
         cell_len, cell_w, cell_area = self.compute_footprint()
         
-        if not HAS_MEEP:
-            # High-precision analytical Coupled-Mode fallback when MEEP is not locally installed
+        if not HAS_MEEP or not use_meep_if_available:
+            # High-precision analytical Coupled-Mode fallback
             return self._run_analytical_cmt(state, cell_len, cell_w, cell_area)
 
         # MEEP Simulation Domain
@@ -265,6 +307,11 @@ class Sub5umSwitchCellMeep:
             )
         ]
 
+        # Calculate reference power for absolute normalization
+        x_mon = x_max_cell - 0.10
+        mon_w = self.w_wg * 2.5
+        p_ref = self._get_reference_flux(sx, sy, dpml, cell, sources, clad_mat, core_mat, x_mon, mon_w)
+
         sim = mp.Simulation(
             cell_size=cell,
             boundary_layers=pml_layers,
@@ -274,18 +321,17 @@ class Sub5umSwitchCellMeep:
             default_material=clad_mat
         )
 
-        # Flux Monitors
-        x_mon = x_max_cell - 0.10
-        mon_w = self.w_wg * 2.5
+        # Output Flux Monitors
         flux_p1 = sim.add_flux(fcen, 0, 1, mp.FluxRegion(center=mp.Vector3(x_mon, self.y_out1, 0), size=mp.Vector3(0, mon_w, 0)))
         flux_p2 = sim.add_flux(fcen, 0, 1, mp.FluxRegion(center=mp.Vector3(x_mon, self.y_out2, 0), size=mp.Vector3(0, mon_w, 0)))
 
-        # Run simulation until fields decay
-        sim.run(until_after_sources=mp.stop_when_fields_decayed(40, mp.Hz, mp.Vector3(x_mon, self.y_out1, 0), 1e-4))
+        # Run simulation until fields decay at the active signal port
+        y_dest = self.y_out2 if state.lower() == "amorphous" else self.y_out1
+        sim.run(until_after_sources=mp.stop_when_fields_decayed(30, mp.Hz, mp.Vector3(x_mon, y_dest, 0), 1e-4))
 
-        # Extract transmitted fluxes
-        p1_power = max(mp.get_fluxes(flux_p1)[0], 1e-12)
-        p2_power = max(mp.get_fluxes(flux_p2)[0], 1e-12)
+        # Extract normalized transmitted powers
+        p1_power = min(max(mp.get_fluxes(flux_p1)[0] / p_ref, 1e-12), 1.0)
+        p2_power = min(max(mp.get_fluxes(flux_p2)[0] / p_ref, 1e-12), 1.0)
         p_total = p1_power + p2_power
 
         return self._format_results(state, p1_power, p2_power, p_total, cell_len, cell_w, cell_area)

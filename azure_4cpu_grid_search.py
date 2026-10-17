@@ -25,12 +25,9 @@ import csv
 from typing import Dict, Any, List, Tuple
 import numpy as np
 
-# Add parent directory for configs
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-try:
-    from configs import mini_16t_constants as cfg
-except ImportError:
-    cfg = None
+# Fast screening and full-wave MEEP imports
+from sub5um_switch_meep import Sub5umSwitchCellMeep
+from mpb_coupler_analyzer import DirectionalCouplerEigenSolver
 
 try:
     import meep as mp
@@ -38,14 +35,12 @@ try:
 except ImportError:
     HAS_MEEP = False
 
-from sub5um_switch_meep import Sub5umSwitchCellMeep
-from mpb_coupler_analyzer import DirectionalCouplerEigenSolver
-
 
 def evaluate_single_switch_config(params: Dict[str, Any]) -> Dict[str, Any]:
     """
     Worker function executed across parallel CPU workers.
     Evaluates both physical footprint and electromagnetic optical transmission.
+    Uses ultra-fast calibrated CMT solver during combinatorial screening.
     """
     w_wg = params["w_wg_nm"] / 1000.0
     gap = params["gap_nm"] / 1000.0
@@ -76,7 +71,7 @@ def evaluate_single_switch_config(params: Dict[str, Any]) -> Dict[str, Any]:
             "params": params
         }
 
-    # 3. Simulate or analytically model transmission
+    # 3. Fast calibrated coupled-mode transmission evaluation
     switch_sim = Sub5umSwitchCellMeep(
         w_wg=w_wg, gap=gap, l_c=l_c, l_ext=l_ext,
         l_bend=l_bend, y_pitch_out=y_pitch_out, w_neck=w_neck,
@@ -84,9 +79,9 @@ def evaluate_single_switch_config(params: Dict[str, Any]) -> Dict[str, Any]:
     )
 
     # State 0: Amorphous Cross
-    res_am = switch_sim.run_simulation("amorphous")
+    res_am = switch_sim.run_simulation("amorphous", use_meep_if_available=False)
     # State 1: Crystalline Bar
-    res_cr = switch_sim.run_simulation("crystalline")
+    res_cr = switch_sim.run_simulation("crystalline", use_meep_if_available=False)
 
     # 4. Check compliance against Janian bounds
     meets_area = cell_area < 5.0
@@ -164,7 +159,7 @@ def generate_search_parameter_grid() -> List[Dict[str, Any]]:
     return grid
 
 
-def run_parallel_grid_search(num_cpus: int = 4, output_dir: str = ".") -> Dict[str, Any]:
+def run_parallel_grid_search(num_cpus: int = 4, output_dir: str = ".", verify_top_n: int = 0) -> Dict[str, Any]:
     """
     Executes the 4-CPU parallel grid search.
     """
@@ -218,9 +213,27 @@ def run_parallel_grid_search(num_cpus: int = 4, output_dir: str = ".") -> Dict[s
                 r["all_passed"]
             ])
 
+    # Select Top Candidates
+    top_candidates = passed_results[:10] if passed_results else valid_results[:10]
+
+    # Optional full-wave MEEP FDTD verification on top candidates
+    if verify_top_n > 0 and HAS_MEEP:
+        print(f"\n[INFO] Running Full-Wave MIT MEEP Maxwell verification on Top {verify_top_n} candidates...")
+        for rank, c in enumerate(top_candidates[:verify_top_n], start=1):
+            sw = Sub5umSwitchCellMeep(
+                w_wg=c["w_wg_nm"]/1000.0, gap=c["gap_nm"]/1000.0, l_c=c["L_c_um"],
+                l_ext=c["l_ext_nm"]/1000.0, l_bend=c["l_bend_um"], y_pitch_out=c["y_pitch_out_um"],
+                w_neck=c["w_neck_nm"]/1000.0
+            )
+            meep_am = sw.run_simulation("amorphous", use_meep_if_available=True)
+            meep_cr = sw.run_simulation("crystalline", use_meep_if_available=True)
+            c["meep_verified"] = True
+            c["meep_amorphous"] = meep_am
+            c["meep_crystalline"] = meep_cr
+            print(f"  Verified Candidate #{rank}: Area={c['cell_area_um2']} um^2 | Am IL={meep_am['insertion_loss_db']:.3f} dB | Cr IL={meep_cr['insertion_loss_db']:.3f} dB | XT={max(meep_am['crosstalk_db'], meep_cr['crosstalk_db']):.1f} dB")
+
     # Export Top Candidates JSON
     json_file = os.path.join(output_dir, "sub5um_top_candidates.json")
-    top_candidates = passed_results[:10] if passed_results else valid_results[:10]
     with open(json_file, "w") as f:
         json.dump(top_candidates, f, indent=2)
 
@@ -251,6 +264,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Azure 4-CPU Sub-5 um^2 Switch Grid Search")
     parser.add_argument("--cpus", type=int, default=4, help="Number of parallel worker processes (default: 4)")
     parser.add_argument("--output-dir", type=str, default=".", help="Output directory for reports and datasets")
+    parser.add_argument("--meep-verify-top", type=int, default=0, help="Run full-wave MEEP verification on top N candidates (default: 0)")
     args = parser.parse_args()
 
-    run_parallel_grid_search(num_cpus=args.cpus, output_dir=args.output_dir)
+    run_parallel_grid_search(num_cpus=args.cpus, output_dir=args.output_dir, verify_top_n=args.meep_verify_top)

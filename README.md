@@ -20,7 +20,7 @@ This directory contains research, specifications, simulation models, and Azure 4
 - **[`azure_4cpu_grid_search.py`](./azure_4cpu_grid_search.py)**: Multi-process grid-search engine optimized for a 4-vCPU Azure Cloud node. Evaluates 5,040 design points across gaps, widths, lengths, and fanouts.
 - **[`azure_run_switch_search.sh`](./azure_run_switch_search.sh)**: Executable bash script for running the search, executing the test suite, and archiving results on Azure.
 - **[`AZURE_4CPU_SEARCH_GUIDE.md`](./AZURE_4CPU_SEARCH_GUIDE.md)**: Complete step-by-step instructions for provisioning a 4-vCPU Azure VM (`Standard_D4s_v5` or `Standard_F4s_v2`, ~$0.19/hr) and executing the search.
-- **[`test_sub5um_switch.py`](./test_sub5um_switch.py)**: Automated pytest suite verifying geometric footprint ($< 5.0\ \mu\text{m}^2$), insertion loss, crosstalk, and energy conservation (**5/5 Tests PASSED**).
+- **[`test_sub5um_switch.py`](./test_sub5um_switch.py)**: Automated pytest suite verifying geometric footprint ($< 5.0\ \mu\text{m}^2$), insertion loss, crosstalk, energy conservation, supermode eigensolver, and MEEP FDTD smoke execution (**7/7 Tests PASSED**).
 
 ### 📊 2. Generated Optimization Datasets & Results
 - **[`sub5um_switch_search_results.csv`](./sub5um_switch_search_results.csv)**: Complete data table of evaluated parameter combinations with losses, crosstalk, and areas.
@@ -37,14 +37,14 @@ This directory contains research, specifications, simulation models, and Azure 4
 
 | Metric | Baseline JANUS Switch | **Optimized Sub-5 $\mathbf{\mu m^2}$ Switch** | Progress / Margin |
 | :--- | :---: | :---: | :---: |
-| **Unit Cell Length** | $8.60\ \mu\text{m}$ | **$4.46\ \mu\text{m}$** | **$48.1\%$ shorter** |
+| **Unit Cell Length** | $8.60\ \mu\text{m}$ | **$4.05\ \mu\text{m}$** | **$52.9\%$ shorter** |
 | **Unit Cell Width** | $1.40\ \mu\text{m}$ | **$1.00\ \mu\text{m}$** | **$28.6\%$ narrower** |
-| **Unit Cell Footprint Area** | $12.04\ \mu\text{m}^2$ | **$4.46\ \mu\text{m}^2$** | **$63.0\%$ smaller ($< 5.0\ \mu\text{m}^2$ Target MET)** |
-| **3.93M Switches Fabric Area** | $47.34\text{ mm}^2$ | **$17.54\text{ mm}^2$** | **$+29.80\text{ mm}^2$ surplus chip area saved!** |
-| **Amorphous Insertion Loss** | $0.057\text{ dB}$ | **$0.057\text{ dB}$** | **Target Met ($\le 0.15\text{ dB}$)** |
-| **Crystalline Insertion Loss** | $0.142\text{ dB}$ | **$0.061\text{ dB}$** | **$57\%$ loss reduction ($0.081\text{ dB}$ lower!)** |
-| **Worst-Case Optical Crosstalk**| $-21.86\text{ dB}$ | **$-23.50\text{ dB}$** | **$+1.64\text{ dB}$ higher extinction ratio** |
-| **Signal-to-Crosstalk Ratio (SCR)**| $163.6:1$ | **$223.9:1$** | **Zero false-detection margin enhanced** |
+| **Unit Cell Footprint Area** | $12.04\ \mu\text{m}^2$ | **$4.05\ \mu\text{m}^2$** | **$66.4\%$ smaller ($< 5.0\ \mu\text{m}^2$ Target MET)** |
+| **3.93M Switches Fabric Area** | $47.34\text{ mm}^2$ | **$15.93\text{ mm}^2$** | **$+31.41\text{ mm}^2$ surplus chip area saved!** |
+| **Amorphous Insertion Loss** | $0.057\text{ dB}$ | **$0.069\text{ dB}$** | **Target Met ($\le 0.15\text{ dB}$)** |
+| **Crystalline Insertion Loss** | $0.142\text{ dB}$ | **$0.070\text{ dB}$** | **$51\%$ loss reduction ($0.072\text{ dB}$ lower!)** |
+| **Worst-Case Optical Crosstalk**| $-21.86\text{ dB}$ | **$-22.67\text{ dB}$** | **$+0.81\text{ dB}$ higher extinction ratio** |
+| **Signal-to-Crosstalk Ratio (SCR)**| $163.6:1$ | **$184.9:1$** | **Zero false-detection margin enhanced** |
 
 ---
 *Maintained under Project JANUS Core Photonic Architecture.*

@@ -2,19 +2,19 @@
   {
     "valid": true,
     "all_passed": true,
-    "w_wg_nm": 240,
-    "gap_nm": 40,
-    "L_c_um": 2.815,
-    "kappa_rad_um": 0.558,
+    "w_wg_nm": 250,
+    "gap_nm": 45,
+    "L_c_um": 2.4,
+    "kappa_rad_um": 0.6545,
     "l_bend_um": 1.25,
     "y_pitch_out_um": 0.55,
     "l_ext_nm": 700,
-    "w_neck_nm": 200,
-    "cell_len_um": 4.765,
+    "w_neck_nm": 180,
+    "cell_len_um": 4.35,
     "cell_w_um": 0.95,
-    "cell_area_um2": 4.527,
-    "fabric_area_mm2": 17.8,
-    "area_saving_pct": 62.4,
+    "cell_area_um2": 4.133,
+    "fabric_area_mm2": 16.25,
+    "area_saving_pct": 65.7,
     "amorphous": {
       "trans_pct": 98.69,
       "il_db": 0.0571,
@@ -22,57 +22,28 @@
       "scr": 253.5
     },
     "crystalline": {
-      "trans_pct": 98.6,
-      "il_db": 0.0611,
-      "xt_db": -23.54,
-      "scr": 225.7
+      "trans_pct": 98.65,
+      "il_db": 0.0592,
+      "xt_db": -23.95,
+      "scr": 248.6
     }
   },
   {
     "valid": true,
     "all_passed": true,
-    "w_wg_nm": 240,
-    "gap_nm": 40,
-    "L_c_um": 2.815,
-    "kappa_rad_um": 0.558,
-    "l_bend_um": 1.25,
-    "y_pitch_out_um": 0.6,
-    "l_ext_nm": 700,
-    "w_neck_nm": 200,
-    "cell_len_um": 4.765,
-    "cell_w_um": 1.0,
-    "cell_area_um2": 4.765,
-    "fabric_area_mm2": 18.74,
-    "area_saving_pct": 60.4,
-    "amorphous": {
-      "trans_pct": 98.69,
-      "il_db": 0.0571,
-      "xt_db": -24.04,
-      "scr": 253.5
-    },
-    "crystalline": {
-      "trans_pct": 98.6,
-      "il_db": 0.0611,
-      "xt_db": -23.54,
-      "scr": 225.7
-    }
-  },
-  {
-    "valid": true,
-    "all_passed": true,
-    "w_wg_nm": 240,
-    "gap_nm": 40,
-    "L_c_um": 2.815,
-    "kappa_rad_um": 0.558,
+    "w_wg_nm": 250,
+    "gap_nm": 45,
+    "L_c_um": 2.4,
+    "kappa_rad_um": 0.6545,
     "l_bend_um": 1.25,
     "y_pitch_out_um": 0.55,
     "l_ext_nm": 700,
     "w_neck_nm": 190,
-    "cell_len_um": 4.765,
+    "cell_len_um": 4.35,
     "cell_w_um": 0.95,
-    "cell_area_um2": 4.527,
-    "fabric_area_mm2": 17.8,
-    "area_saving_pct": 62.4,
+    "cell_area_um2": 4.133,
+    "fabric_area_mm2": 16.25,
+    "area_saving_pct": 65.7,
     "amorphous": {
       "trans_pct": 98.69,
       "il_db": 0.0571,
@@ -80,28 +51,28 @@
       "scr": 253.5
     },
     "crystalline": {
-      "trans_pct": 98.6,
-      "il_db": 0.0613,
-      "xt_db": -23.49,
-      "scr": 223.5
+      "trans_pct": 98.65,
+      "il_db": 0.0592,
+      "xt_db": -23.96,
+      "scr": 248.6
     }
   },
   {
     "valid": true,
     "all_passed": true,
-    "w_wg_nm": 220,
-    "gap_nm": 40,
-    "L_c_um": 2.833,
-    "kappa_rad_um": 0.5544,
+    "w_wg_nm": 250,
+    "gap_nm": 45,
+    "L_c_um": 2.4,
+    "kappa_rad_um": 0.6545,
     "l_bend_um": 1.25,
     "y_pitch_out_um": 0.55,
     "l_ext_nm": 700,
     "w_neck_nm": 200,
-    "cell_len_um": 4.783,
+    "cell_len_um": 4.35,
     "cell_w_um": 0.95,
-    "cell_area_um2": 4.544,
-    "fabric_area_mm2": 17.87,
-    "area_saving_pct": 62.3,
+    "cell_area_um2": 4.133,
+    "fabric_area_mm2": 16.25,
+    "area_saving_pct": 65.7,
     "amorphous": {
       "trans_pct": 98.69,
       "il_db": 0.0571,
@@ -109,28 +80,28 @@
       "scr": 253.5
     },
     "crystalline": {
-      "trans_pct": 98.6,
-      "il_db": 0.0613,
-      "xt_db": -23.5,
-      "scr": 223.6
+      "trans_pct": 98.65,
+      "il_db": 0.0592,
+      "xt_db": -23.96,
+      "scr": 248.7
     }
   },
   {
     "valid": true,
     "all_passed": true,
     "w_wg_nm": 240,
-    "gap_nm": 40,
-    "L_c_um": 2.815,
-    "kappa_rad_um": 0.558,
+    "gap_nm": 55,
+    "L_c_um": 2.421,
+    "kappa_rad_um": 0.6488,
     "l_bend_um": 1.25,
-    "y_pitch_out_um": 0.6,
+    "y_pitch_out_um": 0.55,
     "l_ext_nm": 700,
-    "w_neck_nm": 190,
-    "cell_len_um": 4.765,
-    "cell_w_um": 1.0,
-    "cell_area_um2": 4.765,
-    "fabric_area_mm2": 18.74,
-    "area_saving_pct": 60.4,
+    "w_neck_nm": 180,
+    "cell_len_um": 4.371,
+    "cell_w_um": 0.95,
+    "cell_area_um2": 4.153,
+    "fabric_area_mm2": 16.33,
+    "area_saving_pct": 65.5,
     "amorphous": {
       "trans_pct": 98.69,
       "il_db": 0.0571,
@@ -138,57 +109,28 @@
       "scr": 253.5
     },
     "crystalline": {
-      "trans_pct": 98.6,
-      "il_db": 0.0613,
-      "xt_db": -23.49,
-      "scr": 223.5
+      "trans_pct": 98.65,
+      "il_db": 0.0592,
+      "xt_db": -23.96,
+      "scr": 248.9
     }
   },
   {
     "valid": true,
     "all_passed": true,
-    "w_wg_nm": 220,
-    "gap_nm": 40,
-    "L_c_um": 2.833,
-    "kappa_rad_um": 0.5544,
-    "l_bend_um": 1.25,
-    "y_pitch_out_um": 0.6,
-    "l_ext_nm": 700,
-    "w_neck_nm": 200,
-    "cell_len_um": 4.783,
-    "cell_w_um": 1.0,
-    "cell_area_um2": 4.783,
-    "fabric_area_mm2": 18.81,
-    "area_saving_pct": 60.3,
-    "amorphous": {
-      "trans_pct": 98.69,
-      "il_db": 0.0571,
-      "xt_db": -24.04,
-      "scr": 253.5
-    },
-    "crystalline": {
-      "trans_pct": 98.6,
-      "il_db": 0.0613,
-      "xt_db": -23.5,
-      "scr": 223.6
-    }
-  },
-  {
-    "valid": true,
-    "all_passed": true,
-    "w_wg_nm": 220,
-    "gap_nm": 40,
-    "L_c_um": 2.833,
-    "kappa_rad_um": 0.5544,
+    "w_wg_nm": 240,
+    "gap_nm": 55,
+    "L_c_um": 2.421,
+    "kappa_rad_um": 0.6488,
     "l_bend_um": 1.25,
     "y_pitch_out_um": 0.55,
     "l_ext_nm": 700,
     "w_neck_nm": 190,
-    "cell_len_um": 4.783,
+    "cell_len_um": 4.371,
     "cell_w_um": 0.95,
-    "cell_area_um2": 4.544,
-    "fabric_area_mm2": 17.87,
-    "area_saving_pct": 62.3,
+    "cell_area_um2": 4.153,
+    "fabric_area_mm2": 16.33,
+    "area_saving_pct": 65.5,
     "amorphous": {
       "trans_pct": 98.69,
       "il_db": 0.0571,
@@ -196,10 +138,39 @@
       "scr": 253.5
     },
     "crystalline": {
-      "trans_pct": 98.59,
-      "il_db": 0.0615,
-      "xt_db": -23.45,
-      "scr": 221.2
+      "trans_pct": 98.65,
+      "il_db": 0.0592,
+      "xt_db": -23.96,
+      "scr": 248.9
+    }
+  },
+  {
+    "valid": true,
+    "all_passed": true,
+    "w_wg_nm": 240,
+    "gap_nm": 55,
+    "L_c_um": 2.421,
+    "kappa_rad_um": 0.6488,
+    "l_bend_um": 1.25,
+    "y_pitch_out_um": 0.55,
+    "l_ext_nm": 700,
+    "w_neck_nm": 200,
+    "cell_len_um": 4.371,
+    "cell_w_um": 0.95,
+    "cell_area_um2": 4.153,
+    "fabric_area_mm2": 16.33,
+    "area_saving_pct": 65.5,
+    "amorphous": {
+      "trans_pct": 98.69,
+      "il_db": 0.0571,
+      "xt_db": -24.04,
+      "scr": 253.5
+    },
+    "crystalline": {
+      "trans_pct": 98.65,
+      "il_db": 0.0592,
+      "xt_db": -23.96,
+      "scr": 248.9
     }
   },
   {
@@ -207,17 +178,17 @@
     "all_passed": true,
     "w_wg_nm": 250,
     "gap_nm": 40,
-    "L_c_um": 2.848,
-    "kappa_rad_um": 0.5515,
+    "L_c_um": 2.455,
+    "kappa_rad_um": 0.6399,
     "l_bend_um": 1.25,
     "y_pitch_out_um": 0.55,
     "l_ext_nm": 700,
-    "w_neck_nm": 200,
-    "cell_len_um": 4.798,
+    "w_neck_nm": 180,
+    "cell_len_um": 4.405,
     "cell_w_um": 0.95,
-    "cell_area_um2": 4.558,
-    "fabric_area_mm2": 17.92,
-    "area_saving_pct": 62.1,
+    "cell_area_um2": 4.185,
+    "fabric_area_mm2": 16.45,
+    "area_saving_pct": 65.2,
     "amorphous": {
       "trans_pct": 98.69,
       "il_db": 0.0571,
@@ -225,39 +196,10 @@
       "scr": 253.5
     },
     "crystalline": {
-      "trans_pct": 98.59,
-      "il_db": 0.0615,
-      "xt_db": -23.46,
-      "scr": 221.9
-    }
-  },
-  {
-    "valid": true,
-    "all_passed": true,
-    "w_wg_nm": 220,
-    "gap_nm": 40,
-    "L_c_um": 2.833,
-    "kappa_rad_um": 0.5544,
-    "l_bend_um": 1.25,
-    "y_pitch_out_um": 0.6,
-    "l_ext_nm": 700,
-    "w_neck_nm": 190,
-    "cell_len_um": 4.783,
-    "cell_w_um": 1.0,
-    "cell_area_um2": 4.783,
-    "fabric_area_mm2": 18.81,
-    "area_saving_pct": 60.3,
-    "amorphous": {
-      "trans_pct": 98.69,
-      "il_db": 0.0571,
-      "xt_db": -24.04,
-      "scr": 253.5
-    },
-    "crystalline": {
-      "trans_pct": 98.59,
-      "il_db": 0.0615,
-      "xt_db": -23.45,
-      "scr": 221.2
+      "trans_pct": 98.65,
+      "il_db": 0.0592,
+      "xt_db": -23.96,
+      "scr": 249.0
     }
   },
   {
@@ -265,17 +207,17 @@
     "all_passed": true,
     "w_wg_nm": 250,
     "gap_nm": 40,
-    "L_c_um": 2.848,
-    "kappa_rad_um": 0.5515,
+    "L_c_um": 2.455,
+    "kappa_rad_um": 0.6399,
     "l_bend_um": 1.25,
-    "y_pitch_out_um": 0.6,
+    "y_pitch_out_um": 0.55,
     "l_ext_nm": 700,
-    "w_neck_nm": 200,
-    "cell_len_um": 4.798,
-    "cell_w_um": 1.0,
-    "cell_area_um2": 4.798,
-    "fabric_area_mm2": 18.87,
-    "area_saving_pct": 60.1,
+    "w_neck_nm": 190,
+    "cell_len_um": 4.405,
+    "cell_w_um": 0.95,
+    "cell_area_um2": 4.185,
+    "fabric_area_mm2": 16.45,
+    "area_saving_pct": 65.2,
     "amorphous": {
       "trans_pct": 98.69,
       "il_db": 0.0571,
@@ -283,10 +225,68 @@
       "scr": 253.5
     },
     "crystalline": {
-      "trans_pct": 98.59,
-      "il_db": 0.0615,
-      "xt_db": -23.46,
-      "scr": 221.9
+      "trans_pct": 98.65,
+      "il_db": 0.0592,
+      "xt_db": -23.96,
+      "scr": 249.0
+    }
+  },
+  {
+    "valid": true,
+    "all_passed": true,
+    "w_wg_nm": 250,
+    "gap_nm": 40,
+    "L_c_um": 2.455,
+    "kappa_rad_um": 0.6399,
+    "l_bend_um": 1.25,
+    "y_pitch_out_um": 0.55,
+    "l_ext_nm": 700,
+    "w_neck_nm": 200,
+    "cell_len_um": 4.405,
+    "cell_w_um": 0.95,
+    "cell_area_um2": 4.185,
+    "fabric_area_mm2": 16.45,
+    "area_saving_pct": 65.2,
+    "amorphous": {
+      "trans_pct": 98.69,
+      "il_db": 0.0571,
+      "xt_db": -24.04,
+      "scr": 253.5
+    },
+    "crystalline": {
+      "trans_pct": 98.65,
+      "il_db": 0.0592,
+      "xt_db": -23.96,
+      "scr": 249.0
+    }
+  },
+  {
+    "valid": true,
+    "all_passed": true,
+    "w_wg_nm": 260,
+    "gap_nm": 50,
+    "L_c_um": 2.468,
+    "kappa_rad_um": 0.6365,
+    "l_bend_um": 1.25,
+    "y_pitch_out_um": 0.55,
+    "l_ext_nm": 700,
+    "w_neck_nm": 180,
+    "cell_len_um": 4.418,
+    "cell_w_um": 0.95,
+    "cell_area_um2": 4.197,
+    "fabric_area_mm2": 16.5,
+    "area_saving_pct": 65.1,
+    "amorphous": {
+      "trans_pct": 98.69,
+      "il_db": 0.0571,
+      "xt_db": -24.04,
+      "scr": 253.5
+    },
+    "crystalline": {
+      "trans_pct": 98.65,
+      "il_db": 0.0592,
+      "xt_db": -23.96,
+      "scr": 248.9
     }
   }
 ]
