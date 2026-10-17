@@ -1,70 +1,81 @@
-#!/usr/bin/env bash
-# ==============================================================================
-# PROJECT JANUS: AZURE 4-CPU 3D DIRECTIONAL COUPLER SWITCH SIMULATION LAUNCHER
-# Platform: Standard SOI (220 nm Si, SiO2 Clad) | Wavelength: 1064 nm
-# Targets: Footprint < 5.00 um^2 | IL <= 0.08 dB | XT <= -20.0 dB (Both States)
-# ==============================================================================
+#!/bin/bash
+# ================================================================
+# PROJECT JANUS: Azure VM Launcher - 1x2 Directional Coupler Switch
+# ================================================================
+# Usage:
+#   bash azure_run_directional_coupler_3d.sh              # both states, defaults
+#   bash azure_run_directional_coupler_3d.sh sweep        # parameter sweep
+#   bash azure_run_directional_coupler_3d.sh amorphous    # single state
+#   bash azure_run_directional_coupler_3d.sh crystalline  # single state
+#
+# Requirements: conda activate meep_env (or equivalent)
+# Platform:     Azure Standard_D4s_v5 (4 vCPUs)
+# ================================================================
+
 set -e
 
-AZURE_CPUS=4
-TIMESTAMP=$(date -u +"%Y%m%d_%H%M%S")
-RESULTS_DIR="dc_results_${TIMESTAMP}"
-mkdir -p "${RESULTS_DIR}"
+# ── Multi-core CPU settings ───────────────────────────────────────
+export OMP_NUM_THREADS=4
+export OPENBLAS_NUM_THREADS=4
+export MKL_NUM_THREADS=4
+export NUMEXPR_NUM_THREADS=4
 
-echo "======================================================================"
-echo "  PROJECT JANUS: AZURE 4-CPU 3D DIRECTIONAL COUPLER SWITCH EXECUTION"
-echo "  Targets: Footprint < 5.00 um^2 | IL <= 0.08 dB | XT <= -20.0 dB"
-echo "  Timestamp: $(date -u +"%Y-%m-%d %H:%M:%SZ")"
-echo "======================================================================"
+# ── Parameters ───────────────────────────────────────────────────
+STATE="${1:-both}"
+LC="${2:-3.55}"
+GAP="${3:-0.095}"
+RES="${4:-20}"
 
-# Auto-activate Miniforge Conda environment if available
-if [ -f "$HOME/miniforge3/etc/profile.d/conda.sh" ]; then
-    source "$HOME/miniforge3/etc/profile.d/conda.sh"
-    conda activate base || true
-fi
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+LOG_DIR="./logs"
+mkdir -p "${LOG_DIR}"
+LOG_FILE="${LOG_DIR}/dc_run_${STATE}_${TIMESTAMP}.log"
 
-# Configure multi-core threading for MEEP 3D FDTD grid acceleration
-export OMP_NUM_THREADS="${AZURE_CPUS}"
-export MKL_NUM_THREADS="${AZURE_CPUS}"
-export NUMEXPR_NUM_THREADS="${AZURE_CPUS}"
-export OPENBLAS_NUM_THREADS="${AZURE_CPUS}"
-
-echo "[INFO] Azure VM CPU count configured: ${AZURE_CPUS} cores"
-python3 -c "import sys; print(f'Python runtime: {sys.version}')"
-python3 -c "import meep as mp; print(f'MEEP 3D Engine: Active (v{mp.__version__}) - 4-Core Accelerated')"
-
-# Clean previous local outputs
-rm -f ./directional_coupler_3d_results.json ./directional_coupler_results.csv
-
+echo "================================================================"
+echo "  PROJECT JANUS: 1x2 Directional Coupler Switch (3D MEEP FDTD)"
+echo "================================================================"
+echo "  State      : ${STATE}"
+echo "  L_c        : ${LC} um"
+echo "  Gap        : $(echo "${GAP} * 1000" | bc -l | xargs printf '%.0f') nm"
+echo "  Resolution : ${RES} px/um"
+echo "  OMP Threads: ${OMP_NUM_THREADS}"
+echo "  Log        : ${LOG_FILE}"
+echo "================================================================"
 echo ""
-echo "======================================================================"
-echo "  [STARTING] FULL-WAVE 3D VECTOR MAXWELL FDTD (BOTH STATES)"
-echo "  Architecture: Balanced Symmetrical Sb2S3 Directional Coupler"
-echo "======================================================================"
-python3 master_directional_coupler_3d.py --state both --resolution 20 --output-dir "${RESULTS_DIR}"
 
-# Copy results to current working directory for immediate inspection
-cp "${RESULTS_DIR}/directional_coupler_3d_results.json" ./directional_coupler_3d_results.json
-cp "${RESULTS_DIR}/directional_coupler_results.csv" ./directional_coupler_results.csv
+START_TIME=$(date +%s)
 
-echo ""
-echo "======================================================================"
-echo "  SIMULATION RESULTS SUMMARY (3D VECTOR MAXWELL FDTD):"
-echo "======================================================================"
-if command -v column &> /dev/null; then
-    column -s, -t < directional_coupler_results.csv
+if [ "${STATE}" = "sweep" ]; then
+    echo "Running parameter sweep..."
+    python3 master_directional_coupler_3d.py \
+        --sweep \
+        --lc_min 3.30 --lc_max 3.80 --lc_step 0.10 \
+        --gaps 0.090 0.095 \
+        --resolution "${RES}" 2>&1 | tee "${LOG_FILE}"
 else
-    cat directional_coupler_results.csv
+    python3 master_directional_coupler_3d.py \
+        --state "${STATE}" \
+        --lc "${LC}" \
+        --gap "${GAP}" \
+        --resolution "${RES}" 2>&1 | tee "${LOG_FILE}"
 fi
 
-# Archive Package
-ARCHIVE_NAME="directional_coupler_results_${TIMESTAMP}.tar.gz"
-tar -czf "${ARCHIVE_NAME}" "${RESULTS_DIR}" directional_coupler_3d_results.json directional_coupler_results.csv
+END_TIME=$(date +%s)
+ELAPSED=$((END_TIME - START_TIME))
 
 echo ""
-echo "======================================================================"
-echo "  [SUCCESS] 3D Directional Coupler Switch Simulation Completed!"
-echo "  Primary Results : ./directional_coupler_3d_results.json"
-echo "  Tabular CSV     : ./directional_coupler_results.csv"
-echo "  Archive Package : ${ARCHIVE_NAME}"
-echo "======================================================================"
+echo "================================================================"
+echo "  COMPLETED! Elapsed: ${ELAPSED} s ($(echo "scale=2; ${ELAPSED}/60" | bc) min)"
+echo "  Results  : ./top_directional_coupler_candidates.json"
+echo "  CSV      : ./directional_coupler_results.csv"
+echo "  Log      : ${LOG_FILE}"
+
+# Package results
+ARCHIVE="dc_results_${STATE}_${TIMESTAMP}.tar.gz"
+tar czf "${ARCHIVE}" \
+    top_directional_coupler_candidates.json \
+    directional_coupler_results.csv \
+    "${LOG_FILE}" \
+    2>/dev/null || true
+echo "  Archive  : ./${ARCHIVE}"
+echo "================================================================"
