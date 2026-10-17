@@ -57,8 +57,10 @@ import numpy as np
 try:
     import meep as mp
     HAS_MEEP = True
-except ImportError:
+    _MEEP_ERR = None
+except Exception as e:
     HAS_MEEP = False
+    _MEEP_ERR = str(e)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -140,7 +142,9 @@ def run_asym_dc_switch(
     Crystalline → large Δβ → coupling quenched → Port 1 ≥ 98%.
     """
     if not HAS_MEEP:
-        raise ImportError("MEEP not found. Activate conda meep_env first.")
+        err_msg = f"MEEP not found or failed to load (Error: {_MEEP_ERR})."
+        err_msg += "\nPlease ensure your conda environment with PyMEEP is activated (e.g., 'conda activate base' or 'conda activate meep', or run via 'python' instead of 'python3')."
+        raise ImportError(err_msg)
 
     t0 = time.time()
     lambda_0 = 1.064

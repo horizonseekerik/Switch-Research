@@ -14,6 +14,22 @@
 
 set -e
 
+# ── Auto-activate Conda environment if present ───────────────────
+for CONDA_PATH in "$HOME/miniforge3" "$HOME/miniconda3" "$HOME/anaconda3" "/opt/conda"; do
+    if [ -f "${CONDA_PATH}/etc/profile.d/conda.sh" ]; then
+        source "${CONDA_PATH}/etc/profile.d/conda.sh"
+        conda activate meep 2>/dev/null || conda activate meep_env 2>/dev/null || conda activate base 2>/dev/null || true
+        break
+    fi
+done
+
+PYTHON_EXEC="python3"
+if ! $PYTHON_EXEC -c "import meep" >/dev/null 2>&1; then
+    if python -c "import meep" >/dev/null 2>&1; then
+        PYTHON_EXEC="python"
+    fi
+fi
+
 # ── Multi-core CPU settings ───────────────────────────────────────
 export OMP_NUM_THREADS=4
 export OPENBLAS_NUM_THREADS=4
@@ -47,13 +63,13 @@ START_TIME=$(date +%s)
 
 if [ "${STATE}" = "sweep" ]; then
     echo "Running parameter sweep..."
-    python3 master_directional_coupler_3d.py \
+    "${PYTHON_EXEC}" master_directional_coupler_3d.py \
         --sweep \
         --lc_min 3.30 --lc_max 3.80 --lc_step 0.10 \
         --gaps 0.090 0.095 \
         --resolution "${RES}" 2>&1 | tee "${LOG_FILE}"
 else
-    python3 master_directional_coupler_3d.py \
+    "${PYTHON_EXEC}" master_directional_coupler_3d.py \
         --state "${STATE}" \
         --lc "${LC}" \
         --gap "${GAP}" \

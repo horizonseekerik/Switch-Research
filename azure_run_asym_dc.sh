@@ -19,6 +19,22 @@
 
 set -e
 
+# ── Auto-activate Conda environment if present ───────────────────
+for CONDA_PATH in "$HOME/miniforge3" "$HOME/miniconda3" "$HOME/anaconda3" "/opt/conda"; do
+    if [ -f "${CONDA_PATH}/etc/profile.d/conda.sh" ]; then
+        source "${CONDA_PATH}/etc/profile.d/conda.sh"
+        conda activate meep 2>/dev/null || conda activate meep_env 2>/dev/null || conda activate base 2>/dev/null || true
+        break
+    fi
+done
+
+PYTHON_EXEC="python3"
+if ! $PYTHON_EXEC -c "import meep" >/dev/null 2>&1; then
+    if python -c "import meep" >/dev/null 2>&1; then
+        PYTHON_EXEC="python"
+    fi
+fi
+
 export OMP_NUM_THREADS=4
 export OPENBLAS_NUM_THREADS=4
 export MKL_NUM_THREADS=4
@@ -52,11 +68,11 @@ START_TIME=$(date +%s)
 
 if [ "${MODE}" = "sweep" ]; then
     echo "Running full parameter sweep (w2 × gap × L_c × 2 states)..."
-    python3 asymmetric_dc_switch_3d.py \
+    "${PYTHON_EXEC}" asymmetric_dc_switch_3d.py \
         --sweep \
         --resolution "${RES}" 2>&1 | tee "${LOG_FILE}"
 elif [ "${MODE}" = "amorphous" ] || [ "${MODE}" = "crystalline" ]; then
-    python3 asymmetric_dc_switch_3d.py \
+    "${PYTHON_EXEC}" asymmetric_dc_switch_3d.py \
         --state "${MODE}" \
         --lc "${LC}" \
         --gap "${GAP}" \
@@ -64,7 +80,7 @@ elif [ "${MODE}" = "amorphous" ] || [ "${MODE}" = "crystalline" ]; then
         --resolution "${RES}" 2>&1 | tee "${LOG_FILE}"
 else
     # both states
-    python3 asymmetric_dc_switch_3d.py \
+    "${PYTHON_EXEC}" asymmetric_dc_switch_3d.py \
         --state both \
         --lc "${LC}" \
         --gap "${GAP}" \
