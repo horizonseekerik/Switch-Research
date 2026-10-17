@@ -97,8 +97,8 @@ def make_wg_input_taper(x_start, x_end, y_c, w_full, w_tip=0.020, n_pts=20):
 
 def run_straight_through_dc(
         state="amorphous",
-        l_c=5.10,          # Straight coupling length (um) - centered on exact Kogelnik null
-        gap=0.100,         # Evanescent gap (um)
+        l_c=6.45,          # Straight coupling length (um) - Kogelnik condition at gap=140nm
+        gap=0.140,         # Evanescent gap (um) - harmonic Kogelnik match (s_cr = 2*kappa_am)
         w_wg=0.240,        # Waveguide core width (um)
         w_bend=0.300,      # Widened low-loss S-bend width for WG2 (um)
         h_wg=0.220,        # Silicon core height (um)
@@ -320,7 +320,7 @@ def run_straight_through_dc(
 # Both States Runner
 # ─────────────────────────────────────────────────────────────────────────────
 
-def run_both_states(l_c=5.10, gap=0.100, resolution=20, **kwargs):
+def run_both_states(l_c=6.45, gap=0.140, resolution=20, **kwargs):
     print(f"\n{'#'*72}")
     print(f"STRAIGHT-THROUGH DUAL-STATE VERIFICATION: L_c={l_c:.2f}um, gap={gap*1000:.0f}nm, res={resolution}")
     print(f"{'#'*72}\n")
@@ -371,10 +371,10 @@ def run_both_states(l_c=5.10, gap=0.100, resolution=20, **kwargs):
 # Parameter Sweep
 # ─────────────────────────────────────────────────────────────────────────────
 
-def run_sweep(lc_min=4.90, lc_max=5.30, lc_step=0.10,
+def run_sweep(lc_min=6.20, lc_max=6.70, lc_step=0.10,
               gap_list=None, resolution=20):
     if gap_list is None:
-        gap_list = [0.100]
+        gap_list = [0.140]
 
     results = []
     print(f"\nSWEEP: L_c in [{lc_min:.2f}, {lc_max:.2f}] step {lc_step:.2f} | gaps={[int(g*1000) for g in gap_list]}nm")
@@ -433,14 +433,14 @@ def run_sweep(lc_min=4.90, lc_max=5.30, lc_step=0.10,
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="PROJECT JANUS: Straight-Through 1x2 DC Switch 3D MEEP")
     parser.add_argument("--state", default="both", choices=["amorphous", "crystalline", "both"])
-    parser.add_argument("--lc", type=float, default=5.10, help="Straight coupling length (um)")
-    parser.add_argument("--gap", type=float, default=0.100, help="Evanescent gap (um)")
+    parser.add_argument("--lc", type=float, default=6.45, help="Straight coupling length (um)")
+    parser.add_argument("--gap", type=float, default=0.140, help="Evanescent gap (um)")
     parser.add_argument("--resolution", type=int, default=20, help="FDTD grid resolution (px/um)")
     parser.add_argument("--sweep", action="store_true", help="Run parameter sweep")
-    parser.add_argument("--lc_min", type=float, default=4.90, help="Sweep: min L_c (um)")
-    parser.add_argument("--lc_max", type=float, default=5.30, help="Sweep: max L_c (um)")
+    parser.add_argument("--lc_min", type=float, default=6.20, help="Sweep: min L_c (um)")
+    parser.add_argument("--lc_max", type=float, default=6.70, help="Sweep: max L_c (um)")
     parser.add_argument("--lc_step", type=float, default=0.10, help="Sweep: L_c step (um)")
-    parser.add_argument("--gaps", type=float, nargs="+", default=[0.100], help="Sweep: list of gaps (um)")
+    parser.add_argument("--gaps", type=float, nargs="+", default=[0.140], help="Sweep: list of gaps (um)")
     args = parser.parse_args()
 
     if args.sweep:

@@ -53,8 +53,8 @@ fi
 
 # ── 4. Parameters ────────────────────────────────────────────────────────────
 MODE="${1:-both}"
-LC="${2:-5.10}"
-GAP="${3:-0.100}"
+LC="${2:-6.45}"
+GAP="${3:-0.140}"
 RES="${4:-20}"
 
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
@@ -68,7 +68,7 @@ echo "  Architecture : Port 1 = Straight Through (0 dB bend loss)"
 echo "                 Port 2 = Evanescent Drop (Low-Loss S-Bend)"
 echo "================================================================"
 echo "  Mode        : ${MODE}"
-echo "  L_c         : ${LC} um (Centered on Exact Kogelnik Null)"
+echo "  L_c         : ${LC} um (Harmonic Kogelnik Match at gap=${GAP}um)"
 echo "  Gap         : $(echo "${GAP} * 1000" | bc -l | xargs printf '%.0f') nm"
 echo "  Resolution  : ${RES} px/um"
 echo "  Multi-CPU   : ${RUN_CMD}"
@@ -79,11 +79,11 @@ echo ""
 START_TIME=$(date +%s)
 
 if [ "${MODE}" = "sweep" ]; then
-    echo "Launching fine-grid parameter sweep around Kogelnik null (L_c=4.90 to 5.30 um)..."
+    echo "Launching fine-grid parameter sweep around Kogelnik match (L_c=6.20 to 6.70 um, gap=140nm)..."
     ${RUN_CMD} straight_through_dc_switch_3d.py \
         --sweep \
-        --lc_min 4.90 --lc_max 5.30 --lc_step 0.10 \
-        --gaps 0.100 \
+        --lc_min 6.20 --lc_max 6.70 --lc_step 0.10 \
+        --gaps 0.140 \
         --resolution "${RES}" 2>&1 | tee "${LOG_FILE}"
 elif [ "${MODE}" = "amorphous" ] || [ "${MODE}" = "crystalline" ]; then
     ${RUN_CMD} straight_through_dc_switch_3d.py \
