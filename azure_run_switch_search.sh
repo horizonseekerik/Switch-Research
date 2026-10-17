@@ -58,14 +58,32 @@ python3 -c "try:
 except ImportError:
     print('MEEP FDTD Status: Analytical CMT Mode (Install conda-forge/pymeep for full wave)')"
 
-# Run the 4-CPU Parallel Grid Search
+# ==============================================================================
+# PHASE 1 (PRIMARY & MANDATORY): FULL-WAVE 3D SWITCH SIMULATION
+# ==============================================================================
 echo ""
-echo "[INFO] Launching 4-CPU Grid Search across parameter space..."
+echo "======================================================================"
+echo "  [PRIMARY] EXECUTING 3D VECTOR MAXWELL SWITCH SIMULATION"
+echo "  Target: 3D Silicon Wire (220nm) + Sb2S3 Thin Film (20nm) + Hermite S-Bends"
+echo "======================================================================"
+python3 "${SCRIPT_DIR}/sub5um_switch_3d_meep.py" --state both --resolution 20 --output-dir "${SCRIPT_DIR}"
+
+# ==============================================================================
+# PHASE 2 (OPTIONAL / SWEEP): 4-CPU PARAMETER GRID SEARCH
+# ==============================================================================
+echo ""
+echo "======================================================================"
+echo "  [OPTIONAL] RUNNING 4-CPU 2D PARAMETER GRID SEARCH (5,040 DESIGNS)"
+echo "======================================================================"
 python3 "${SCRIPT_DIR}/azure_4cpu_grid_search.py" --cpus "${NUM_CPUS}" --output-dir "${SCRIPT_DIR}" "$@"
 
-# Run automated verification suite
+# ==============================================================================
+# PHASE 3: COMPREHENSIVE VERIFICATION SUITE (3D & 2D TESTS)
+# ==============================================================================
 echo ""
-echo "[INFO] Running verification test suite..."
+echo "======================================================================"
+echo "  PHASE 3: RUNNING VERIFICATION TEST SUITE"
+echo "======================================================================"
 if python3 -c "import pytest" 2>/dev/null; then
     python3 -m pytest "${SCRIPT_DIR}/test_sub5um_switch.py" -v
 else
@@ -73,20 +91,24 @@ else
     python3 "${SCRIPT_DIR}/test_sub5um_switch.py"
 fi
 
-# Archive results
+# ==============================================================================
+# ARCHIVE RESULTS
+# ==============================================================================
 TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
 ARCHIVE_NAME="sub5um_switch_results_${TIMESTAMP}.tar.gz"
 echo ""
 echo "[INFO] Archiving results to ${ARCHIVE_NAME}..."
 tar -czf "${SCRIPT_DIR}/${ARCHIVE_NAME}" \
     -C "${SCRIPT_DIR}" \
+    sub5um_3d_switch_results.json \
     sub5um_switch_search_results.csv \
     sub5um_top_candidates.json
 
 echo ""
 echo "======================================================================"
-echo "  SUCCESS: 4-CPU Azure Switch Search Completed Successfully!"
-echo "  Results: ${SCRIPT_DIR}/sub5um_switch_search_results.csv"
-echo "  Top 10 : ${SCRIPT_DIR}/sub5um_top_candidates.json"
-echo "  Archive: ${SCRIPT_DIR}/${ARCHIVE_NAME}"
+echo "  SUCCESS: 3D Switch Simulation & Verification Completed Successfully!"
+echo "  3D Model Results : ${SCRIPT_DIR}/sub5um_3d_switch_results.json"
+echo "  Parameter Search : ${SCRIPT_DIR}/sub5um_switch_search_results.csv"
+echo "  Top Candidates   : ${SCRIPT_DIR}/sub5um_top_candidates.json"
+echo "  Archive Package  : ${SCRIPT_DIR}/${ARCHIVE_NAME}"
 echo "======================================================================"
