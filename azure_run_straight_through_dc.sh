@@ -30,15 +30,30 @@ if ! $PYTHON_EXEC -c "import meep" >/dev/null 2>&1; then
     fi
 fi
 
-# ── 3. Configure multi-threaded CPU settings for 4 vCPUs ──────────────────────
+# ── 3. Configure Multi-CPU Execution (MPI + OpenMP) ───────────────────────────
 export OMP_NUM_THREADS=4
 export OPENBLAS_NUM_THREADS=4
 export MKL_NUM_THREADS=4
 export NUMEXPR_NUM_THREADS=4
 
+NUM_CPUS=4
+RUN_CMD="${PYTHON_EXEC}"
+
+# Check if mpirun works with MEEP for multi-core speedup
+if command -v mpirun >/dev/null 2>&1; then
+    if mpirun -np 2 "${PYTHON_EXEC}" -c "import meep" >/dev/null 2>&1; then
+        echo "[INFO] OpenMPI detected! Running across ${NUM_CPUS} CPU cores with mpirun."
+        RUN_CMD="mpirun -np ${NUM_CPUS} ${PYTHON_EXEC}"
+    else
+        echo "[INFO] Running with OpenMP multi-threading (OMP_NUM_THREADS=${NUM_CPUS})."
+    fi
+else
+    echo "[INFO] Running with OpenMP multi-threading (OMP_NUM_THREADS=${NUM_CPUS})."
+fi
+
 # ── 4. Parameters ────────────────────────────────────────────────────────────
 MODE="${1:-both}"
-LC="${2:-3.65}"
+LC="${2:-4.50}"
 GAP="${3:-0.100}"
 RES="${4:-20}"
 
@@ -53,11 +68,10 @@ echo "  Architecture : Port 1 = Straight Through (0 dB bend loss)"
 echo "                 Port 2 = Evanescent Drop (Low-Loss S-Bend)"
 echo "================================================================"
 echo "  Mode        : ${MODE}"
-echo "  L_c         : ${LC} um"
+echo "  L_c         : ${LC} um (Centered on Kogelnik Null)"
 echo "  Gap         : $(echo "${GAP} * 1000" | bc -l | xargs printf '%.0f') nm"
 echo "  Resolution  : ${RES} px/um"
-echo "  OMP Threads : ${OMP_NUM_THREADS}"
-echo "  Python Exec : ${PYTHON_EXEC} ($($PYTHON_EXEC --version 2>&1))"
+echo "  Multi-CPU   : ${RUN_CMD}"
 echo "  Log File    : ${LOG_FILE}"
 echo "================================================================"
 echo ""
@@ -65,21 +79,21 @@ echo ""
 START_TIME=$(date +%s)
 
 if [ "${MODE}" = "sweep" ]; then
-    echo "Launching fine-grid parameter sweep around Kogelnik crossing..."
-    "${PYTHON_EXEC}" straight_through_dc_switch_3d.py \
+    echo "Launching fine-grid parameter sweep around Kogelnik null (L_c=4.30 to 4.70 um)..."
+    ${RUN_CMD} straight_through_dc_switch_3d.py \
         --sweep \
-        --lc_min 3.40 --lc_max 3.80 --lc_step 0.10 \
+        --lc_min 4.30 --lc_max 4.70 --lc_step 0.05 \
         --gaps 0.095 0.100 0.105 \
         --resolution "${RES}" 2>&1 | tee "${LOG_FILE}"
 elif [ "${MODE}" = "amorphous" ] || [ "${MODE}" = "crystalline" ]; then
-    "${PYTHON_EXEC}" straight_through_dc_switch_3d.py \
+    ${RUN_CMD} straight_through_dc_switch_3d.py \
         --state "${MODE}" \
         --lc "${LC}" \
         --gap "${GAP}" \
         --resolution "${RES}" 2>&1 | tee "${LOG_FILE}"
 else
     # default: both states
-    "${PYTHON_EXEC}" straight_through_dc_switch_3d.py \
+    ${RUN_CMD} straight_through_dc_switch_3d.py \
         --state both \
         --lc "${LC}" \
         --gap "${GAP}" \
