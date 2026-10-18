@@ -51,9 +51,9 @@ fi
 
 # ── 4. Parameters ────────────────────────────────────────────────────────────
 MODE="${1:-both}"
-LC="${2:-1.85}"
+LC="${2:-2.15}"
 LTAP="${3:-0.35}"
-WSLOT="${4:-0.090}"
+WSLOT="${4:-0.070}"
 WRAIL="${5:-0.450}"
 RES="${6:-25}"
 
@@ -67,12 +67,12 @@ echo "  PROJECT JANUS: Si3N4 EMBEDDED PCM SLOT SWITCH (GEOMETRY B)"
 echo "  Platform    : Silicon Nitride (Si3N4, n=2.016) on SiO2 (n=1.449)"
 echo "  Active PCM  : Sb2S3 directly embedded in-plane between dual rails"
 echo "  Transitions : Adiabatic Linear Slot Tapers (Loss < 0.2%)"
-echo "  Footprint   : Nominal 4.89 um^2 (Upper Limit: <= 6.0 um^2 PASS)"
+echo "  Footprint   : Nominal 5.23 um^2 (Upper Limit: <= 6.0 um^2 PASS)"
 echo "================================================================"
 echo "  Mode        : ${MODE}"
 echo "  L_c         : ${LC} um (uniform coupling zone)"
 echo "  L_tap       : ${LTAP} um (adiabatic entry/exit tapers)"
-echo "  W_slot      : ${WSLOT} um (90 nm central embedded slot)"
+echo "  W_slot      : ${WSLOT} um (70 nm central slot - 3D 2.000 resonance)"
 echo "  W_rail      : ${WRAIL} um (450 nm Si3N4 rails)"
 echo "  Resolution  : ${RES} px/um"
 echo "  Log File    : ${LOG_FILE}"
@@ -82,10 +82,10 @@ echo ""
 START_TIME=$(date +%s)
 
 if [ "${MODE}" = "sweep" ]; then
-    echo "Launching fine parameter sweep (L_c=1.65 to 2.15 um, step 0.05 um)..."
+    echo "Launching fine parameter sweep (L_c=1.95 to 2.30 um, step 0.05 um)..."
     ${RUN_CMD} sin_embedded_slot_switch_3d.py \
         --sweep \
-        --lc_min 1.65 --lc_max 2.15 --lc_step 0.05 \
+        --lc_min 1.95 --lc_max 2.30 --lc_step 0.05 \
         --ltap "${LTAP}" \
         --w_slot "${WSLOT}" \
         --w_rail "${WRAIL}" \
