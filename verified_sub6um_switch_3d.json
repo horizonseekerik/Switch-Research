@@ -1,0 +1,31 @@
+{
+  "architecture": "Protected Directional Coupler 1x2 Switch (Kogelnik Phase-Mismatch)",
+  "parameters": {
+    "l_c_um": 4.3,
+    "gap_nm": 98.0,
+    "t_pcm_nm": 160.0,
+    "w_wg_nm": 240,
+    "h_wg_nm": 220,
+    "w_bend_nm": 280.0,
+    "y_pitch_nm": 450.0,
+    "resolution": 15
+  },
+  "results": {
+    "amorphous": {
+      "port2_cross_trans": 0.7763121906867978,
+      "port1_bar_leakage": 0.20834981665045824,
+      "insertion_loss_db": 1.0996359391330959,
+      "crosstalk_db": -5.712432834759196,
+      "total_guided_trans": 0.9846620073372561
+    },
+    "crystalline": {
+      "port1_bar_trans": 0.8525701185728232,
+      "port2_cross_leakage": 0.13338784386204053,
+      "insertion_loss_db": 0.6926989285514361,
+      "crosstalk_db": -8.056138546572274,
+      "total_guided_trans": 0.9859579624348637
+    },
+    "cell_footprint_um2": 5.350499999999999,
+    "area_check_pass": true
+  }
+}
