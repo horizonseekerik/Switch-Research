@@ -49,8 +49,8 @@ except Exception as e:
 # Geometry Helpers
 # ─────────────────────────────────────────────────────────────────────────────
 
-def make_cosine_sbend(x_start, x_end, y_start, y_end, w1, w2=None, n_pts=30):
-    """Cosine S-bend polygon with smooth width tapering."""
+def make_cosine_sbend(x_start, x_end, y_start, y_end, w1, w2=None, z=0.0, n_pts=30):
+    """Counter-Clockwise (CCW) Cosine S-bend polygon with base z-coordinate."""
     if w2 is None:
         w2 = w1
     dx = x_end - x_start
@@ -59,19 +59,19 @@ def make_cosine_sbend(x_start, x_end, y_start, y_end, w1, w2=None, n_pts=30):
     x = x_start + u * dx
     y = y_start + dy * (0.5 * (1.0 - np.cos(np.pi * u)))
     w = w1 + (w2 - w1) * (0.5 * (1.0 - np.cos(np.pi * u)))
-    top = [mp.Vector3(xi, yi + wi / 2.0, 0) for xi, yi, wi in zip(x, y, w)]
-    bot = [mp.Vector3(xi, yi - wi / 2.0, 0) for xi, yi, wi in reversed(list(zip(x, y, w)))]
-    return top + bot
+    bot = [mp.Vector3(xi, yi - wi / 2.0, z) for xi, yi, wi in zip(x, y, w)]
+    top = [mp.Vector3(xi, yi + wi / 2.0, z) for xi, yi, wi in reversed(list(zip(x, y, w)))]
+    return bot + top
 
 
-def make_taper_polygon(x_start, x_end, y_c, w_start, w_end, n_pts=25):
-    """Raised-cosine adiabatic taper polygon."""
+def make_taper_polygon(x_start, x_end, y_c, w_start, w_end, z=0.0, n_pts=25):
+    """Counter-Clockwise (CCW) raised-cosine adiabatic taper polygon with base z-coordinate."""
     u = np.linspace(0, 1, n_pts)
     x = x_start + u * (x_end - x_start)
     w = w_start + (w_end - w_start) * 0.5 * (1.0 - np.cos(np.pi * u))
-    top = [mp.Vector3(xi, y_c + wi / 2.0, 0) for xi, wi in zip(x, w)]
-    bot = [mp.Vector3(xi, y_c - wi / 2.0, 0) for xi, wi in reversed(list(zip(x, w)))]
-    return top + bot
+    bot = [mp.Vector3(xi, y_c - wi / 2.0, z) for xi, wi in zip(x, w)]
+    top = [mp.Vector3(xi, y_c + wi / 2.0, z) for xi, wi in reversed(list(zip(x, w)))]
+    return bot + top
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -202,74 +202,69 @@ def run_protected_dc(
             print(f"[{state.upper()}] Using Cached Reference Flux = {p_ref:.6e}")
 
     # ── 2. Device Geometry ────────────────────────────────────────────────────
-    # In MEEP, vertices define the polygon in the plane normal to axis (Z).
-    # If vertices are already in absolute (x, y) coordinates, center MUST be (0, 0, z_center)
-    # so that MEEP does not apply any spurious (x, y) displacement!
-    z_si = h_wg / 2.0
-    z_pcm = h_wg + t_pcm / 2.0
+    # In MEEP, vertices define the 2D base of the prism in the transverse plane.
+    # When axis = Vector3(0, 0, 1), vertices with z = z_base will be extruded
+    # from z_base to z_base + height.
+    # Omitting center ensures MEEP does NOT rigidly translate the (x, y) centroid to (0, 0)!
+    z_si_base = 0.0
+    z_pcm_base = h_wg
 
-    # WG1 Polygons
-    poly_pcm1_in = make_taper_polygon(x1, x2, y1, w_tip, w_wg)
-    poly_pcm1_out = make_taper_polygon(x5, x6, y1, w_wg, w_tip)
+    # WG1 PCM Tapers (base sits at z = h_wg = 0.220, height = t_pcm = 0.150)
+    poly_pcm1_in = make_taper_polygon(x1, x2, y1, w_tip, w_wg, z=z_pcm_base)
+    poly_pcm1_out = make_taper_polygon(x5, x6, y1, w_wg, w_tip, z=z_pcm_base)
 
     # WG2 Polygons
-    poly_pcm2_in = make_taper_polygon(x1, x2, y_out2, w_tip, w_wg)
-    poly_pcm2_out = make_taper_polygon(x5, x6, y_out2, w_wg, w_tip)
-    poly_bend2_in = make_cosine_sbend(x2, x3, y_out2, y2, w_wg, w_bend)
-    poly_bend2_out = make_cosine_sbend(x4, x5, y2, y_out2, w_bend, w_wg)
+    poly_pcm2_in = make_taper_polygon(x1, x2, y_out2, w_tip, w_wg, z=z_pcm_base)
+    poly_pcm2_out = make_taper_polygon(x5, x6, y_out2, w_wg, w_tip, z=z_pcm_base)
+    poly_bend2_in_si = make_cosine_sbend(x2, x3, y_out2, y2, w_wg, w_bend, z=z_si_base)
+    poly_bend2_out_si = make_cosine_sbend(x4, x5, y2, y_out2, w_bend, w_wg, z=z_si_base)
+    poly_bend2_in_pcm = make_cosine_sbend(x2, x3, y_out2, y2, w_wg, w_bend, z=z_pcm_base)
+    poly_bend2_out_pcm = make_cosine_sbend(x4, x5, y2, y_out2, w_bend, w_wg, z=z_pcm_base)
 
     geom_dev = [
         # Substrate
         mp.Block(center=mp.Vector3(0, 0, -sz / 4.0), size=mp.Vector3(mp.inf, mp.inf, sz / 2.0), material=clad_mat),
 
         # ── WG1 (STRAIGHT BUS): 100% continuous bare silicon core along y = 0
-        mp.Block(center=mp.Vector3(0, y1, z_si),
+        mp.Block(center=mp.Vector3(0, y1, h_wg / 2.0),
                  size=mp.Vector3(mp.inf, w_wg, h_wg), material=core_mat),
 
         # ── WG2 (DROP ARM) SILICON CORE:
         # Input lead at y_out2 (in PML/left)
-        mp.Block(center=mp.Vector3((x_left + x2) / 2.0, y_out2, z_si),
+        mp.Block(center=mp.Vector3((x_left + x2) / 2.0, y_out2, h_wg / 2.0),
                  size=mp.Vector3(x2 - x_left, w_wg, h_wg), material=core_mat),
-        # Entrance S-bend: curves in from y_out2 to y2
-        mp.Prism(vertices=poly_bend2_in, height=h_wg, axis=mp.Vector3(0, 0, 1),
-                 center=mp.Vector3(0, 0, z_si), material=core_mat),
+        # Entrance S-bend: curves in from y_out2 to y2 (extending from z=0 to z=h_wg)
+        mp.Prism(vertices=poly_bend2_in_si, height=h_wg, axis=mp.Vector3(0, 0, 1), material=core_mat),
         # Straight coupled section at y2
-        mp.Block(center=mp.Vector3((x3 + x4) / 2.0, y2, z_si),
+        mp.Block(center=mp.Vector3((x3 + x4) / 2.0, y2, h_wg / 2.0),
                  size=mp.Vector3(l_c, w_wg, h_wg), material=core_mat),
-        # Exit S-bend: curves out from y2 to y_out2
-        mp.Prism(vertices=poly_bend2_out, height=h_wg, axis=mp.Vector3(0, 0, 1),
-                 center=mp.Vector3(0, 0, z_si), material=core_mat),
+        # Exit S-bend: curves out from y2 to y_out2 (extending from z=0 to z=h_wg)
+        mp.Prism(vertices=poly_bend2_out_si, height=h_wg, axis=mp.Vector3(0, 0, 1), material=core_mat),
         # Output lead at y_out2 (through PML/right)
-        mp.Block(center=mp.Vector3((x5 + x_right) / 2.0, y_out2, z_si),
+        mp.Block(center=mp.Vector3((x5 + x_right) / 2.0, y_out2, h_wg / 2.0),
                  size=mp.Vector3(x_right - x5, w_wg, h_wg), material=core_mat),
 
         # ── WG1 PCM STACK (along y = 0):
-        # Isolated entrance taper (x1 -> x2)
-        mp.Prism(vertices=poly_pcm1_in, height=t_pcm, axis=mp.Vector3(0, 0, 1),
-                 center=mp.Vector3(0, 0, z_pcm), material=mat_wg1_pcm),
+        # Isolated entrance taper (x1 -> x2, sits at z in [h_wg, h_wg + t_pcm])
+        mp.Prism(vertices=poly_pcm1_in, height=t_pcm, axis=mp.Vector3(0, 0, 1), material=mat_wg1_pcm),
         # Uniform coupling + bends protection body (x2 -> x5)
-        mp.Block(center=mp.Vector3((x2 + x5) / 2.0, y1, z_pcm),
+        mp.Block(center=mp.Vector3((x2 + x5) / 2.0, y1, h_wg + t_pcm / 2.0),
                  size=mp.Vector3(x5 - x2, w_wg, t_pcm), material=mat_wg1_pcm),
-        # Isolated exit taper (x5 -> x6)
-        mp.Prism(vertices=poly_pcm1_out, height=t_pcm, axis=mp.Vector3(0, 0, 1),
-                 center=mp.Vector3(0, 0, z_pcm), material=mat_wg1_pcm),
+        # Isolated exit taper (x5 -> x6, sits at z in [h_wg, h_wg + t_pcm])
+        mp.Prism(vertices=poly_pcm1_out, height=t_pcm, axis=mp.Vector3(0, 0, 1), material=mat_wg1_pcm),
 
-        # ── WG2 PCM STACK (along WG2 path):
+        # ── WG2 PCM STACK (along WG2 path, sits at z in [h_wg, h_wg + t_pcm]):
         # Isolated entrance taper at y_out2 (x1 -> x2)
-        mp.Prism(vertices=poly_pcm2_in, height=t_pcm, axis=mp.Vector3(0, 0, 1),
-                 center=mp.Vector3(0, 0, z_pcm), material=mat_wg2_pcm),
+        mp.Prism(vertices=poly_pcm2_in, height=t_pcm, axis=mp.Vector3(0, 0, 1), material=mat_wg2_pcm),
         # Entrance S-bend PCM (x2 -> x3)
-        mp.Prism(vertices=poly_bend2_in, height=t_pcm, axis=mp.Vector3(0, 0, 1),
-                 center=mp.Vector3(0, 0, z_pcm), material=mat_wg2_pcm),
+        mp.Prism(vertices=poly_bend2_in_pcm, height=t_pcm, axis=mp.Vector3(0, 0, 1), material=mat_wg2_pcm),
         # Straight coupled section PCM (x3 -> x4)
-        mp.Block(center=mp.Vector3((x3 + x4) / 2.0, y2, z_pcm),
+        mp.Block(center=mp.Vector3((x3 + x4) / 2.0, y2, h_wg + t_pcm / 2.0),
                  size=mp.Vector3(l_c, w_wg, t_pcm), material=mat_wg2_pcm),
         # Exit S-bend PCM (x4 -> x5)
-        mp.Prism(vertices=poly_bend2_out, height=t_pcm, axis=mp.Vector3(0, 0, 1),
-                 center=mp.Vector3(0, 0, z_pcm), material=mat_wg2_pcm),
+        mp.Prism(vertices=poly_bend2_out_pcm, height=t_pcm, axis=mp.Vector3(0, 0, 1), material=mat_wg2_pcm),
         # Isolated exit taper at y_out2 (x5 -> x6)
-        mp.Prism(vertices=poly_pcm2_out, height=t_pcm, axis=mp.Vector3(0, 0, 1),
-                 center=mp.Vector3(0, 0, z_pcm), material=mat_wg2_pcm),
+        mp.Prism(vertices=poly_pcm2_out, height=t_pcm, axis=mp.Vector3(0, 0, 1), material=mat_wg2_pcm),
     ]
 
     # ── 3. Simulation Execution ───────────────────────────────────────────────
