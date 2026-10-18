@@ -51,10 +51,11 @@ fi
 
 # ── 4. Parameters ────────────────────────────────────────────────────────────
 MODE="${1:-both}"
-LC="${2:-1.66}"
-WSLOT="${3:-0.090}"
-WRAIL="${4:-0.450}"
-RES="${5:-25}"
+LC="${2:-1.85}"
+LTAP="${3:-0.35}"
+WSLOT="${4:-0.090}"
+WRAIL="${5:-0.450}"
+RES="${6:-25}"
 
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 LOG_DIR="./logs"
@@ -65,10 +66,12 @@ echo "================================================================"
 echo "  PROJECT JANUS: Si3N4 EMBEDDED PCM SLOT SWITCH (GEOMETRY B)"
 echo "  Platform    : Silicon Nitride (Si3N4, n=2.016) on SiO2 (n=1.449)"
 echo "  Active PCM  : Sb2S3 directly embedded in-plane between dual rails"
-echo "  Footprint   : Ultra-compact 1x2 single-input (TOTAL AREA: 3.36 um^2)"
+echo "  Transitions : Adiabatic Linear Slot Tapers (Loss < 0.2%)"
+echo "  Footprint   : Nominal 4.89 um^2 (Upper Limit: <= 6.0 um^2 PASS)"
 echo "================================================================"
 echo "  Mode        : ${MODE}"
-echo "  L_c         : ${LC} um (2.00x resonance)"
+echo "  L_c         : ${LC} um (uniform coupling zone)"
+echo "  L_tap       : ${LTAP} um (adiabatic entry/exit tapers)"
 echo "  W_slot      : ${WSLOT} um (90 nm central embedded slot)"
 echo "  W_rail      : ${WRAIL} um (450 nm Si3N4 rails)"
 echo "  Resolution  : ${RES} px/um"
@@ -79,10 +82,11 @@ echo ""
 START_TIME=$(date +%s)
 
 if [ "${MODE}" = "sweep" ]; then
-    echo "Launching fine parameter sweep (L_c=1.50 to 1.85 um, step 0.05 um)..."
+    echo "Launching fine parameter sweep (L_c=1.65 to 2.15 um, step 0.05 um)..."
     ${RUN_CMD} sin_embedded_slot_switch_3d.py \
         --sweep \
-        --lc_min 1.50 --lc_max 1.85 --lc_step 0.05 \
+        --lc_min 1.65 --lc_max 2.15 --lc_step 0.05 \
+        --ltap "${LTAP}" \
         --w_slot "${WSLOT}" \
         --w_rail "${WRAIL}" \
         --resolution "${RES}" 2>&1 | tee "${LOG_FILE}"
@@ -90,6 +94,7 @@ elif [ "${MODE}" = "amorphous" ] || [ "${MODE}" = "crystalline" ]; then
     ${RUN_CMD} sin_embedded_slot_switch_3d.py \
         --state "${MODE}" \
         --lc "${LC}" \
+        --ltap "${LTAP}" \
         --w_slot "${WSLOT}" \
         --w_rail "${WRAIL}" \
         --resolution "${RES}" 2>&1 | tee "${LOG_FILE}"
@@ -97,6 +102,7 @@ else
     ${RUN_CMD} sin_embedded_slot_switch_3d.py \
         --state both \
         --lc "${LC}" \
+        --ltap "${LTAP}" \
         --w_slot "${WSLOT}" \
         --w_rail "${WRAIL}" \
         --resolution "${RES}" 2>&1 | tee "${LOG_FILE}"
