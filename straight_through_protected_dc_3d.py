@@ -94,7 +94,8 @@ def run_protected_dc(
         l_out=0.350,       # Output lead length (um)
         iso_buf=0.100,     # Lateral cell isolation buffer (um)
         resolution=20,     # FDTD grid resolution (px/um)
-        verbose=True
+        verbose=True,
+        p_ref=None         # Cached reference flux (skips re-running reference)
 ):
     """
     Simulates the Protected Directional Coupler Switch:
@@ -180,23 +181,33 @@ def run_protected_dc(
     ]
 
     # ── 1. Reference Simulation: Straight Bare Silicon Bus ────────────────────
-    if verbose:
-        print(f"[{state.upper()}] 1. Reference Waveguide (Straight Bare Si at y=0)...")
-    geom_ref = [
-        mp.Block(center=mp.Vector3(0, 0, -sz / 4.0), size=mp.Vector3(mp.inf, mp.inf, sz / 2.0), material=clad_mat),
-        mp.Block(center=mp.Vector3(0, y1, h_wg / 2.0), size=mp.Vector3(mp.inf, w_wg, h_wg), material=core_mat)
-    ]
-    sim_ref = mp.Simulation(cell_size=cell, boundary_layers=pml_layers, geometry=geom_ref,
-                            sources=sources, resolution=resolution, default_material=clad_mat)
-    f_ref = sim_ref.add_flux(fcen, 0, 1, mp.FluxRegion(
-        center=mp.Vector3(x_mon, y1, h_wg / 2.0), size=mp.Vector3(0, mon_w, mon_h)))
-    sim_ref.run(until_after_sources=mp.stop_when_fields_decayed(
-        20, mp.Hz, mp.Vector3(x_mon, y1, h_wg / 2.0), 1e-3))
-    p_ref = max(mp.get_fluxes(f_ref)[0], 1e-12)
-    if verbose:
-        print(f"[{state.upper()}] Reference Flux = {p_ref:.6e}")
+    if p_ref is None:
+        if verbose:
+            print(f"[{state.upper()}] 1. Running Reference Waveguide (Straight Bare Si at y=0)...")
+        geom_ref = [
+            mp.Block(center=mp.Vector3(0, 0, -sz / 4.0), size=mp.Vector3(mp.inf, mp.inf, sz / 2.0), material=clad_mat),
+            mp.Block(center=mp.Vector3(0, y1, h_wg / 2.0), size=mp.Vector3(mp.inf, w_wg, h_wg), material=core_mat)
+        ]
+        sim_ref = mp.Simulation(cell_size=cell, boundary_layers=pml_layers, geometry=geom_ref,
+                                sources=sources, resolution=resolution, default_material=clad_mat)
+        f_ref = sim_ref.add_flux(fcen, 0, 1, mp.FluxRegion(
+            center=mp.Vector3(x_mon, y1, h_wg / 2.0), size=mp.Vector3(0, mon_w, mon_h)))
+        sim_ref.run(until_after_sources=mp.stop_when_fields_decayed(
+            20, mp.Hz, mp.Vector3(x_mon, y1, h_wg / 2.0), 1e-3))
+        p_ref = max(mp.get_fluxes(f_ref)[0], 1e-12)
+        if verbose:
+            print(f"[{state.upper()}] Reference Flux Cached = {p_ref:.6e}")
+    else:
+        if verbose:
+            print(f"[{state.upper()}] Using Cached Reference Flux = {p_ref:.6e}")
 
     # ── 2. Device Geometry ────────────────────────────────────────────────────
+    # In MEEP, vertices define the polygon in the plane normal to axis (Z).
+    # If vertices are already in absolute (x, y) coordinates, center MUST be (0, 0, z_center)
+    # so that MEEP does not apply any spurious (x, y) displacement!
+    z_si = h_wg / 2.0
+    z_pcm = h_wg + t_pcm / 2.0
+
     # WG1 Polygons
     poly_pcm1_in = make_taper_polygon(x1, x2, y1, w_tip, w_wg)
     poly_pcm1_out = make_taper_polygon(x5, x6, y1, w_wg, w_tip)
@@ -212,49 +223,53 @@ def run_protected_dc(
         mp.Block(center=mp.Vector3(0, 0, -sz / 4.0), size=mp.Vector3(mp.inf, mp.inf, sz / 2.0), material=clad_mat),
 
         # ── WG1 (STRAIGHT BUS): 100% continuous bare silicon core along y = 0
-        mp.Block(center=mp.Vector3(0, y1, h_wg / 2.0),
+        mp.Block(center=mp.Vector3(0, y1, z_si),
                  size=mp.Vector3(mp.inf, w_wg, h_wg), material=core_mat),
 
         # ── WG2 (DROP ARM) SILICON CORE:
         # Input lead at y_out2 (in PML/left)
-        mp.Block(center=mp.Vector3((x_left + x2) / 2.0, y_out2, h_wg / 2.0),
+        mp.Block(center=mp.Vector3((x_left + x2) / 2.0, y_out2, z_si),
                  size=mp.Vector3(x2 - x_left, w_wg, h_wg), material=core_mat),
         # Entrance S-bend: curves in from y_out2 to y2
-        mp.Prism(vertices=poly_bend2_in, height=h_wg, axis=mp.Vector3(0, 0, 1), material=core_mat),
+        mp.Prism(vertices=poly_bend2_in, height=h_wg, axis=mp.Vector3(0, 0, 1),
+                 center=mp.Vector3(0, 0, z_si), material=core_mat),
         # Straight coupled section at y2
-        mp.Block(center=mp.Vector3((x3 + x4) / 2.0, y2, h_wg / 2.0),
+        mp.Block(center=mp.Vector3((x3 + x4) / 2.0, y2, z_si),
                  size=mp.Vector3(l_c, w_wg, h_wg), material=core_mat),
         # Exit S-bend: curves out from y2 to y_out2
-        mp.Prism(vertices=poly_bend2_out, height=h_wg, axis=mp.Vector3(0, 0, 1), material=core_mat),
+        mp.Prism(vertices=poly_bend2_out, height=h_wg, axis=mp.Vector3(0, 0, 1),
+                 center=mp.Vector3(0, 0, z_si), material=core_mat),
         # Output lead at y_out2 (through PML/right)
-        mp.Block(center=mp.Vector3((x5 + x_right) / 2.0, y_out2, h_wg / 2.0),
+        mp.Block(center=mp.Vector3((x5 + x_right) / 2.0, y_out2, z_si),
                  size=mp.Vector3(x_right - x5, w_wg, h_wg), material=core_mat),
 
         # ── WG1 PCM STACK (along y = 0):
         # Isolated entrance taper (x1 -> x2)
         mp.Prism(vertices=poly_pcm1_in, height=t_pcm, axis=mp.Vector3(0, 0, 1),
-                 center=mp.Vector3((x1 + x2) / 2.0, y1, h_wg + t_pcm / 2.0), material=mat_wg1_pcm),
+                 center=mp.Vector3(0, 0, z_pcm), material=mat_wg1_pcm),
         # Uniform coupling + bends protection body (x2 -> x5)
-        mp.Block(center=mp.Vector3((x2 + x5) / 2.0, y1, h_wg + t_pcm / 2.0),
+        mp.Block(center=mp.Vector3((x2 + x5) / 2.0, y1, z_pcm),
                  size=mp.Vector3(x5 - x2, w_wg, t_pcm), material=mat_wg1_pcm),
         # Isolated exit taper (x5 -> x6)
         mp.Prism(vertices=poly_pcm1_out, height=t_pcm, axis=mp.Vector3(0, 0, 1),
-                 center=mp.Vector3((x5 + x6) / 2.0, y1, h_wg + t_pcm / 2.0), material=mat_wg1_pcm),
+                 center=mp.Vector3(0, 0, z_pcm), material=mat_wg1_pcm),
 
         # ── WG2 PCM STACK (along WG2 path):
         # Isolated entrance taper at y_out2 (x1 -> x2)
         mp.Prism(vertices=poly_pcm2_in, height=t_pcm, axis=mp.Vector3(0, 0, 1),
-                 center=mp.Vector3((x1 + x2) / 2.0, y_out2, h_wg + t_pcm / 2.0), material=mat_wg2_pcm),
+                 center=mp.Vector3(0, 0, z_pcm), material=mat_wg2_pcm),
         # Entrance S-bend PCM (x2 -> x3)
-        mp.Prism(vertices=poly_bend2_in, height=t_pcm, axis=mp.Vector3(0, 0, 1), material=mat_wg2_pcm),
+        mp.Prism(vertices=poly_bend2_in, height=t_pcm, axis=mp.Vector3(0, 0, 1),
+                 center=mp.Vector3(0, 0, z_pcm), material=mat_wg2_pcm),
         # Straight coupled section PCM (x3 -> x4)
-        mp.Block(center=mp.Vector3((x3 + x4) / 2.0, y2, h_wg + t_pcm / 2.0),
+        mp.Block(center=mp.Vector3((x3 + x4) / 2.0, y2, z_pcm),
                  size=mp.Vector3(l_c, w_wg, t_pcm), material=mat_wg2_pcm),
         # Exit S-bend PCM (x4 -> x5)
-        mp.Prism(vertices=poly_bend2_out, height=t_pcm, axis=mp.Vector3(0, 0, 1), material=mat_wg2_pcm),
+        mp.Prism(vertices=poly_bend2_out, height=t_pcm, axis=mp.Vector3(0, 0, 1),
+                 center=mp.Vector3(0, 0, z_pcm), material=mat_wg2_pcm),
         # Isolated exit taper at y_out2 (x5 -> x6)
         mp.Prism(vertices=poly_pcm2_out, height=t_pcm, axis=mp.Vector3(0, 0, 1),
-                 center=mp.Vector3((x5 + x6) / 2.0, y_out2, h_wg + t_pcm / 2.0), material=mat_wg2_pcm),
+                 center=mp.Vector3(0, 0, z_pcm), material=mat_wg2_pcm),
     ]
 
     # ── 3. Simulation Execution ───────────────────────────────────────────────
@@ -302,7 +317,8 @@ def run_protected_dc(
         "pass_il": (il_db <= 0.088),
         "pass_xt": (xt_db <= -20.0),
         "all_pass": (il_db <= 0.088 and xt_db <= -20.0),
-        "elapsed_s": elapsed
+        "elapsed_s": elapsed,
+        "p_ref": p_ref
     }
 
     if verbose:
@@ -329,9 +345,12 @@ def run_both_states(l_c=3.90, gap=0.105, resolution=20, l_taper=0.800, **kwargs)
     print(f"PROTECTED DIRECTIONAL COUPLER: DUAL-STATE VERIFICATION")
     print(f"L_c={l_c:.2f}um, gap={gap*1000:.0f}nm, l_taper={l_taper*1000:.0f}nm, res={resolution} px/um")
     print("=" * 80)
+    # Run amorphous (computes and caches p_ref)
     r_am = run_protected_dc("amorphous", l_c=l_c, gap=gap, resolution=resolution, l_taper=l_taper, **kwargs)
+    p_ref_cached = r_am.get("p_ref", None)
     print("-" * 80)
-    r_cr = run_protected_dc("crystalline", l_c=l_c, gap=gap, resolution=resolution, l_taper=l_taper, **kwargs)
+    # Run crystalline (reuses cached p_ref, saving ~2.5 minutes!)
+    r_cr = run_protected_dc("crystalline", l_c=l_c, gap=gap, resolution=resolution, l_taper=l_taper, p_ref=p_ref_cached, **kwargs)
 
     both_pass = r_am["all_pass"] and r_cr["all_pass"]
     print("\n" + "#" * 80)
@@ -355,17 +374,25 @@ def run_both_states(l_c=3.90, gap=0.105, resolution=20, l_taper=0.800, **kwargs)
     return r_am, r_cr
 
 
-def run_sweep(lc_min=3.70, lc_max=4.10, lc_step=0.05, gap_list=None, resolution=20, l_taper=0.800):
+def run_sweep(lc_min=3.85, lc_max=3.95, lc_step=0.05, gap_list=None, resolution=20, l_taper=0.800):
     if gap_list is None:
-        gap_list = [0.100, 0.105, 0.110]
+        gap_list = [0.105]
     lc_vals = np.arange(lc_min, lc_max + 1e-6, lc_step)
     out_csv = "protected_dc_sweep_results.csv"
 
+    n_points = len(lc_vals) * len(gap_list)
     print("=" * 80)
-    print(f"PROTECTED DC PARAMETER SWEEP")
+    print(f"PROTECTED DC FAST PARAMETER SWEEP")
     print(f"L_c range: [{lc_min:.2f}, {lc_max:.2f}] step {lc_step:.2f} | gaps={[int(g*1000) for g in gap_list]}nm")
+    print(f"Total points: {n_points} ({n_points * 2} device evaluations)")
     print(f"Output CSV: {out_csv}")
     print("=" * 80)
+
+    # Pre-compute reference simulation ONCE (saves ~50% total runtime!)
+    print("\n[SWEEP PRE-COMPUTE] Running reference simulation once for entire sweep...")
+    r_init = run_protected_dc("amorphous", l_c=lc_vals[0], gap=gap_list[0], resolution=resolution, l_taper=l_taper, verbose=False)
+    p_ref_cached = r_init["p_ref"]
+    print(f"[SWEEP PRE-COMPUTE] Reference flux cached: {p_ref_cached:.6e}. Evaluating sweep points...\n")
 
     results = []
     with open(out_csv, "w", newline="") as f:
@@ -382,8 +409,8 @@ def run_sweep(lc_min=3.70, lc_max=4.10, lc_step=0.05, gap_list=None, resolution=
 
         for gap in gap_list:
             for lc in lc_vals:
-                r_am = run_protected_dc("amorphous", l_c=lc, gap=gap, resolution=resolution, l_taper=l_taper, verbose=False)
-                r_cr = run_protected_dc("crystalline", l_c=lc, gap=gap, resolution=resolution, l_taper=l_taper, verbose=False)
+                r_am = run_protected_dc("amorphous", l_c=lc, gap=gap, resolution=resolution, l_taper=l_taper, p_ref=p_ref_cached, verbose=False)
+                r_cr = run_protected_dc("crystalline", l_c=lc, gap=gap, resolution=resolution, l_taper=l_taper, p_ref=p_ref_cached, verbose=False)
                 both_pass = r_am["all_pass"] and r_cr["all_pass"]
 
                 row = [

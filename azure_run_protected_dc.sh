@@ -84,11 +84,11 @@ echo ""
 START_TIME=$(date +%s)
 
 if [ "${MODE}" = "sweep" ]; then
-    echo "Launching fine parameter sweep (L_c=3.70 to 4.10 um, gap=100/105/110 nm)..."
+    echo "Launching targeted fast sweep around resonance (L_c=3.80 to 4.00 um, step 0.05 um, gap=105 nm)..."
     ${RUN_CMD} straight_through_protected_dc_3d.py \
         --sweep \
-        --lc_min 3.70 --lc_max 4.10 --lc_step 0.05 \
-        --gaps 0.100 0.105 0.110 \
+        --lc_min 3.80 --lc_max 4.00 --lc_step 0.05 \
+        --gaps 0.105 \
         --ltaper "${LTAPER}" \
         --resolution "${RES}" 2>&1 | tee "${LOG_FILE}"
 elif [ "${MODE}" = "amorphous" ] || [ "${MODE}" = "crystalline" ]; then
