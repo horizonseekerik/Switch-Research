@@ -62,6 +62,7 @@ LOG_DIR="./logs"
 mkdir -p "${LOG_DIR}"
 LOG_FILE="${LOG_DIR}/straight_dc_${MODE}_${TIMESTAMP}.log"
 
+GAP_NM=$(${PYTHON_EXEC} -c "print(f'{float(\"${GAP}\") * 1000.0:.0f}')")
 echo "================================================================"
 echo "  PROJECT JANUS: Straight-Through 1x2 DC Switch (3D MEEP FDTD)"
 echo "  Architecture : Port 1 = Straight Through (0 dB bend loss)"
@@ -69,7 +70,7 @@ echo "                 Port 2 = Evanescent Drop (Low-Loss S-Bend)"
 echo "================================================================"
 echo "  Mode        : ${MODE}"
 echo "  L_c         : ${LC} um (Crystalline Refinement Peak at gap=${GAP}um)"
-echo "  Gap         : $(echo "${GAP} * 1000" | bc -l | xargs printf '%.0f') nm"
+echo "  Gap         : ${GAP_NM} nm"
 echo "  Resolution  : ${RES} px/um"
 echo "  Multi-CPU   : ${RUN_CMD}"
 echo "  Log File    : ${LOG_FILE}"
@@ -103,9 +104,10 @@ fi
 END_TIME=$(date +%s)
 ELAPSED=$((END_TIME - START_TIME))
 
+ELAPSED_MIN=$(${PYTHON_EXEC} -c "print(f'{$ELAPSED / 60.0:.2f}')")
 echo ""
 echo "================================================================"
-echo "  COMPLETED! Elapsed: ${ELAPSED} s ($(echo "scale=2; ${ELAPSED}/60" | bc) min)"
+echo "  COMPLETED! Elapsed: ${ELAPSED} s (~${ELAPSED_MIN} min)"
 echo "  JSON Results : ./top_straight_through_dc_candidates.json"
 echo "  CSV Results  : ./straight_through_dc_results.csv"
 echo "  Log File     : ${LOG_FILE}"
