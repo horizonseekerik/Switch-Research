@@ -59,15 +59,15 @@ ARCH_PRESETS = {
     "option2": {
         "name": "Option 2: Asymmetric Cores (Thick PCM)",
         "w1": 0.240,
-        "w2": 0.340,
+        "w2": 0.285,
         "t_pcm1": 0.150,
         "t_pcm2": 0.000,
         "has_pcm2": False,
         "default_gap": 0.100,
-        "default_lc": 4.25,
+        "default_lc": 4.40,
         "l_tip": 0.380,
-        "w_bend": 0.340,
-        "description": "Asymmetric cores (240nm vs 340nm bare Si), 150nm PCM on WG1; quenches S-bend leakage"
+        "w_bend": 0.300,
+        "description": "Asymmetric cores (240nm vs 285nm bare Si), 150nm PCM on WG1; quenches S-bend leakage"
     },
     "combined": {
         "name": "Combined: Thin PCM + Asymmetric Core (Top Candidate)",
@@ -473,52 +473,56 @@ def run_all_architectures(resolution=20, **kwargs):
 # ─────────────────────────────────────────────────────────────────────────────
 
 def run_arch_sweep(arch="combined", lc_min=None, lc_max=None, lc_step=0.10,
-                   gap_list=None, resolution=20, **kwargs):
+                   gap_list=None, w2_list=None, resolution=20, **kwargs):
     cfg = ARCH_PRESETS.get(arch.lower(), ARCH_PRESETS["combined"])
     def_lc = cfg["default_lc"]
     lc_min = lc_min if lc_min is not None else (def_lc - 0.20)
     lc_max = lc_max if lc_max is not None else (def_lc + 0.20)
     if gap_list is None:
         gap_list = [cfg["default_gap"]]
+    if w2_list is None:
+        w2_list = [kwargs.get("w2", cfg["w2"])]
 
     results = []
-    print(f"\nSWEEP [{arch.upper()}]: L_c in [{lc_min:.2f}, {lc_max:.2f}] step {lc_step:.2f} | gaps={[int(g*1000) for g in gap_list]}nm")
+    print(f"\nSWEEP [{arch.upper()}]: L_c in [{lc_min:.2f}, {lc_max:.2f}] step {lc_step:.2f} | gaps={[int(g*1000) for g in gap_list]}nm | w2={[int(w*1000) for w in w2_list]}nm")
     lc_vals = np.arange(lc_min, lc_max + lc_step / 2.0, lc_step)
 
     csv_path = f"refined_sweep_{arch}_results.csv"
     with open(csv_path, "w", newline="") as csvfile:
         writer = None
-        for gap in gap_list:
-            for lc in lc_vals:
-                r_am = run_refined_switch_3d(arch=arch, state="amorphous", l_c=lc, gap=gap, resolution=resolution, verbose=False, **kwargs)
-                r_cr = run_refined_switch_3d(arch=arch, state="crystalline", l_c=lc, gap=gap, resolution=resolution, verbose=False, **kwargs)
-                row = {
-                    "arch": arch,
-                    "l_c_um": round(lc, 2),
-                    "gap_nm": int(gap * 1000),
-                    "am_signal": r_am["signal_port_pct"],
-                    "cr_signal": r_cr["signal_port_pct"],
-                    "am_il": r_am["il_db"],
-                    "cr_il": r_cr["il_db"],
-                    "am_xt": r_am["xt_db"],
-                    "cr_xt": r_cr["xt_db"],
-                    "active_area": r_am["active_area_um2"],
-                    "am_pass": r_am["all_passed"],
-                    "cr_pass": r_cr["all_passed"],
-                    "both_pass": r_am["all_passed"] and r_cr["all_passed"],
-                }
-                results.append(row)
-                if writer is None:
-                    writer = csv.DictWriter(csvfile, fieldnames=list(row.keys()))
-                    writer.writeheader()
-                writer.writerow(row)
-                csvfile.flush()
+        for w2_val in w2_list:
+            for gap in gap_list:
+                for lc in lc_vals:
+                    r_am = run_refined_switch_3d(arch=arch, state="amorphous", l_c=lc, gap=gap, w2=w2_val, resolution=resolution, verbose=False, **kwargs)
+                    r_cr = run_refined_switch_3d(arch=arch, state="crystalline", l_c=lc, gap=gap, w2=w2_val, resolution=resolution, verbose=False, **kwargs)
+                    row = {
+                        "arch": arch,
+                        "w2_nm": int(w2_val * 1000),
+                        "l_c_um": round(lc, 2),
+                        "gap_nm": int(gap * 1000),
+                        "am_signal": r_am["signal_port_pct"],
+                        "cr_signal": r_cr["signal_port_pct"],
+                        "am_il": r_am["il_db"],
+                        "cr_il": r_cr["il_db"],
+                        "am_xt": r_am["xt_db"],
+                        "cr_xt": r_cr["xt_db"],
+                        "active_area": r_am["active_area_um2"],
+                        "am_pass": r_am["all_passed"],
+                        "cr_pass": r_cr["all_passed"],
+                        "both_pass": r_am["all_passed"] and r_cr["all_passed"],
+                    }
+                    results.append(row)
+                    if writer is None:
+                        writer = csv.DictWriter(csvfile, fieldnames=list(row.keys()))
+                        writer.writeheader()
+                    writer.writerow(row)
+                    csvfile.flush()
 
-                status = "*** BOTH PASS ***" if row["both_pass"] else (
-                    "am PASS" if row["am_pass"] else ("cr PASS" if row["cr_pass"] else "--"))
-                print(f"  L_c={lc:.2f}um, gap={int(gap*1000)}nm | "
-                      f"am={r_am['signal_port_pct']:.2f}%(IL={r_am['il_db']:.3f}dB) | "
-                      f"cr={r_cr['signal_port_pct']:.2f}%(IL={r_cr['il_db']:.3f}dB,XT={r_cr['xt_db']:.1f}dB) | {status}")
+                    status = "*** BOTH PASS ***" if row["both_pass"] else (
+                        "am PASS" if row["am_pass"] else ("cr PASS" if row["cr_pass"] else "--"))
+                    print(f"  w2={int(w2_val*1000)}nm, L_c={lc:.2f}um, gap={int(gap*1000)}nm | "
+                          f"am={r_am['signal_port_pct']:.2f}%(IL={r_am['il_db']:.3f}dB) | "
+                          f"cr={r_cr['signal_port_pct']:.2f}%(IL={r_cr['il_db']:.3f}dB,XT={r_cr['xt_db']:.1f}dB) | {status}")
 
     print(f"\nSweep complete! Saved: {csv_path}")
     return results
@@ -530,7 +534,7 @@ def run_arch_sweep(arch="combined", lc_min=None, lc_max=None, lc_step=0.10,
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="PROJECT JANUS: Refined 3D Directional Coupler Switch MEEP")
-    parser.add_argument("--arch", default="combined", choices=["option1", "option2", "combined", "all"],
+    parser.add_argument("--arch", default="option2", choices=["option1", "option2", "combined", "all"],
                         help="Architecture choice (option1: thin symmetric, option2: asymmetric thick, combined: thin asymmetric, all: run all 3)")
     parser.add_argument("--state", default="both", choices=["amorphous", "crystalline", "both"])
     parser.add_argument("--lc", type=float, default=None, help="Coupling length L_c (um)")
@@ -544,6 +548,7 @@ if __name__ == "__main__":
     parser.add_argument("--lc_max", type=float, default=None, help="Sweep max L_c (um)")
     parser.add_argument("--lc_step", type=float, default=0.10, help="Sweep L_c step (um)")
     parser.add_argument("--gaps", type=float, nargs="+", default=None, help="Sweep gaps (um)")
+    parser.add_argument("--w2_list", type=float, nargs="+", default=None, help="Sweep: list of w2 (um)")
 
     args = parser.parse_args()
 
@@ -556,7 +561,7 @@ if __name__ == "__main__":
         run_all_architectures(resolution=args.resolution, **kwargs)
     elif args.sweep:
         run_arch_sweep(arch=args.arch, lc_min=args.lc_min, lc_max=args.lc_max, lc_step=args.lc_step,
-                       gap_list=args.gaps, resolution=args.resolution, **kwargs)
+                       gap_list=args.gaps, w2_list=args.w2_list, resolution=args.resolution, **kwargs)
     elif args.state == "both":
         run_both_states_arch(arch=args.arch, l_c=args.lc, gap=args.gap, resolution=args.resolution, **kwargs)
     else:
