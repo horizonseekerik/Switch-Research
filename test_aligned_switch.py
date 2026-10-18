@@ -1,0 +1,51 @@
+"""
+PROJECT JANUS: HIGH-EFFICIENCY ALIGNED DIRECTIONAL COUPLER SWITCH (3D FDTD)
+============================================================================
+Evaluates tpcm = 200 nm, gap = 105 nm (u = 2.11) across L_c in [3.20, 3.40, 3.60] um.
+"""
+
+import sys, os, math, time
+import numpy as np
+import meep as mp
+
+from test_protected_sub6um_dc import simulate_protected_dc
+
+def run_aligned_sweep():
+    gap = 0.105
+    t_pcm = 0.200
+    resolution = 15
+
+    print("=" * 95)
+    print("  PROJECT JANUS: ALIGNED SWITCH DUAL-STATE RESONANCE SWEEP")
+    print(f"  t_pcm = {t_pcm*1000:.0f} nm, Gap = {gap*1000:.1f} nm, Resolution = {resolution}")
+    print("=" * 95)
+    print(f"{'L_c(um)':<8} {'AM P2(Cross)%':<15} {'AM P1(Bar)%':<13} {'CR P1(Bar)%':<13} {'CR P2(Cross)%':<15} {'AM Sig/G':<11} {'CR Sig/G':<11} {'Area(um2)':<10}")
+    print("-" * 95)
+
+    # Reference waveguide cached once
+    res_ref = simulate_protected_dc("amorphous", resolution=resolution, l_c=3.40, gap=gap, t_pcm=t_pcm, verbose=False)
+    p_ref = res_ref["p_ref"]
+
+    for lc in [3.20, 3.40, 3.60]:
+        res_am = simulate_protected_dc("amorphous", resolution=resolution, l_c=lc, gap=gap, t_pcm=t_pcm, p_ref=p_ref, verbose=False)
+        res_cr = simulate_protected_dc("crystalline", resolution=resolution, l_c=lc, gap=gap, t_pcm=t_pcm, p_ref=p_ref, verbose=False)
+
+        am_p2 = res_am["p2"] * 100.0
+        am_p1 = res_am["p1"] * 100.0
+        cr_p1 = res_cr["p1"] * 100.0
+        cr_p2 = res_cr["p2"] * 100.0
+
+        am_tot = am_p2 + am_p1
+        cr_tot = cr_p1 + cr_p2
+
+        am_ratio = (am_p2 / am_tot) * 100.0 if am_tot > 0 else 0.0
+        cr_ratio = (cr_p1 / cr_tot) * 100.0 if cr_tot > 0 else 0.0
+        area = res_am["cell_area"]
+
+        print(f"{lc:<8.2f} {am_p2:<15.2f} {am_p1:<13.2f} {cr_p1:<13.2f} {cr_p2:<15.2f} {am_ratio:<11.2f}% {cr_ratio:<11.2f}% {area:<10.3f}")
+        sys.stdout.flush()
+
+    print("=" * 95)
+
+if __name__ == '__main__':
+    run_aligned_sweep()
