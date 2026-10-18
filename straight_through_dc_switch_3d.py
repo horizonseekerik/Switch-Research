@@ -97,13 +97,14 @@ def make_wg_input_taper(x_start, x_end, y_c, w_full, w_tip=0.020, n_pts=20):
 
 def run_straight_through_dc(
         state="amorphous",
-        l_c=4.25,          # Straight coupling length (um) - peak dual-state transmission
+        l_c=4.40,          # Straight coupling length (um) - peak amorphous cross-coupling
         gap=0.100,         # Evanescent gap (um) - verified low-loss regime
         w_wg=0.240,        # Waveguide core width (um)
         w_bend=0.300,      # Widened low-loss S-bend width for WG2 (um)
         h_wg=0.220,        # Silicon core height (um)
         t_pcm=0.150,       # Sb2S3 PCM thickness (um)
-        l_tip=0.380,       # Raised-cosine adiabatic PCM taper length per side (um)
+        l_tip=0.400,       # Raised-cosine adiabatic PCM taper length per side (um)
+        l_pcm_ext=0.350,   # WG1 PCM extension into S-bend fanout (quenches fanout leakage!)
         w_tip=0.020,       # Lithographic tip width (um)
         l_in=0.350,        # Input lead length (um)
         l_bend=1.050,      # Fast-decoupling cosine S-bend fanout length for WG2 (um)
@@ -202,10 +203,12 @@ def run_straight_through_dc(
         print(f"[{state.upper()}] Reference Flux = {p_ref:.6e}")
 
     # ── 2. Device Geometry ────────────────────────────────────────────────────
-    pcm_pts1 = make_tapered_pcm(x_str_start, y1, l_c, l_tip, w_wg, w_tip)
+    # WG1 has PCM extended by l_pcm_ext into the S-bend fanout to choke off parasitic leakage!
+    pcm_pts1 = make_tapered_pcm(x_str_start, y1, l_c + l_pcm_ext, l_tip, w_wg, w_tip)
     cx1 = float(np.mean([p.x for p in pcm_pts1]))
     cy1 = float(np.mean([p.y for p in pcm_pts1]))
 
+    # WG2 PCM ends cleanly at x_str_end so WG2 enters the S-bend as bare silicon
     pcm_pts2 = make_tapered_pcm(x_str_start, y2, l_c, l_tip, w_wg, w_tip)
     cx2 = float(np.mean([p.x for p in pcm_pts2]))
     cy2 = float(np.mean([p.y for p in pcm_pts2]))
@@ -320,16 +323,16 @@ def run_straight_through_dc(
 # Both States Runner
 # ─────────────────────────────────────────────────────────────────────────────
 
-def run_both_states(l_c=4.25, gap=0.100, resolution=20, **kwargs):
+def run_both_states(l_c=4.40, gap=0.100, resolution=20, l_pcm_ext=0.350, **kwargs):
     print(f"\n{'#'*72}")
-    print(f"STRAIGHT-THROUGH DUAL-STATE VERIFICATION: L_c={l_c:.2f}um, gap={gap*1000:.0f}nm, res={resolution}")
+    print(f"STRAIGHT-THROUGH DUAL-STATE VERIFICATION: L_c={l_c:.2f}um, gap={gap*1000:.0f}nm, ext={l_pcm_ext*1000:.0f}nm, res={resolution}")
     print(f"{'#'*72}\n")
 
-    r_am = run_straight_through_dc("amorphous", l_c=l_c, gap=gap, resolution=resolution, **kwargs)
-    r_cr = run_straight_through_dc("crystalline", l_c=l_c, gap=gap, resolution=resolution, **kwargs)
+    r_am = run_straight_through_dc("amorphous", l_c=l_c, gap=gap, resolution=resolution, l_pcm_ext=l_pcm_ext, **kwargs)
+    r_cr = run_straight_through_dc("crystalline", l_c=l_c, gap=gap, resolution=resolution, l_pcm_ext=l_pcm_ext, **kwargs)
 
     print(f"\n{'#'*72}")
-    print(f"DUAL-STATE SUMMARY  (L_c={l_c:.2f}um, gap={gap*1000:.0f}nm)")
+    print(f"DUAL-STATE SUMMARY  (L_c={l_c:.2f}um, gap={gap*1000:.0f}nm, ext={l_pcm_ext*1000:.0f}nm)")
     print(f"{'#'*72}")
     hdr = f"{'Metric':<28} {'Amorphous (State 0)':<23} {'Crystalline (State 1)'}"
     print(hdr)
@@ -371,13 +374,13 @@ def run_both_states(l_c=4.25, gap=0.100, resolution=20, **kwargs):
 # Parameter Sweep
 # ─────────────────────────────────────────────────────────────────────────────
 
-def run_sweep(lc_min=4.10, lc_max=4.40, lc_step=0.10,
-              gap_list=None, resolution=20):
+def run_sweep(lc_min=4.20, lc_max=4.60, lc_step=0.10,
+              gap_list=None, l_pcm_ext=0.350, resolution=20):
     if gap_list is None:
         gap_list = [0.100]
 
     results = []
-    print(f"\nSWEEP: L_c in [{lc_min:.2f}, {lc_max:.2f}] step {lc_step:.2f} | gaps={[int(g*1000) for g in gap_list]}nm")
+    print(f"\nSWEEP: L_c in [{lc_min:.2f}, {lc_max:.2f}] step {lc_step:.2f} | gaps={[int(g*1000) for g in gap_list]}nm | ext={l_pcm_ext*1000:.0f}nm")
     lc_vals = np.arange(lc_min, lc_max + lc_step / 2, lc_step)
 
     csv_path = "straight_through_dc_sweep_results.csv"
@@ -387,11 +390,12 @@ def run_sweep(lc_min=4.10, lc_max=4.40, lc_step=0.10,
         writer = None
         for gap in gap_list:
             for lc in lc_vals:
-                r_am = run_straight_through_dc("amorphous", l_c=lc, gap=gap, resolution=resolution, verbose=False)
-                r_cr = run_straight_through_dc("crystalline", l_c=lc, gap=gap, resolution=resolution, verbose=False)
+                r_am = run_straight_through_dc("amorphous", l_c=lc, gap=gap, l_pcm_ext=l_pcm_ext, resolution=resolution, verbose=False)
+                r_cr = run_straight_through_dc("crystalline", l_c=lc, gap=gap, l_pcm_ext=l_pcm_ext, resolution=resolution, verbose=False)
                 row = {
                     "l_c_um": round(lc, 2),
                     "gap_nm": int(gap * 1000),
+                    "ext_nm": int(l_pcm_ext * 1000),
                     "am_signal": r_am["signal_port_pct"],
                     "cr_signal": r_cr["signal_port_pct"],
                     "am_il": r_am["il_db"],
@@ -412,7 +416,7 @@ def run_sweep(lc_min=4.10, lc_max=4.40, lc_step=0.10,
 
                 status = "*** BOTH PASS ***" if row["both_pass"] else (
                     "am PASS" if row["am_pass"] else ("cr PASS" if row["cr_pass"] else "--"))
-                print(f"  L_c={lc:.2f}um, gap={int(gap*1000)}nm | "
+                print(f"  L_c={lc:.2f}um, gap={int(gap*1000)}nm, ext={int(l_pcm_ext*1000)}nm | "
                       f"am={r_am['signal_port_pct']:.2f}%(IL={r_am['il_db']:.3f}dB,XT={r_am['xt_db']:.1f}dB) | "
                       f"cr={r_cr['signal_port_pct']:.2f}%(IL={r_cr['il_db']:.3f}dB,XT={r_cr['xt_db']:.1f}dB) | {status}")
 
@@ -433,20 +437,22 @@ def run_sweep(lc_min=4.10, lc_max=4.40, lc_step=0.10,
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="PROJECT JANUS: Straight-Through 1x2 DC Switch 3D MEEP")
     parser.add_argument("--state", default="both", choices=["amorphous", "crystalline", "both"])
-    parser.add_argument("--lc", type=float, default=4.25, help="Straight coupling length (um)")
+    parser.add_argument("--lc", type=float, default=4.40, help="Straight coupling length (um)")
     parser.add_argument("--gap", type=float, default=0.100, help="Evanescent gap (um)")
+    parser.add_argument("--pcm_ext", type=float, default=0.350, help="WG1 PCM extension into S-bend fanout (um)")
+    parser.add_argument("--ltip", type=float, default=0.400, help="PCM adiabatic taper length (um)")
     parser.add_argument("--resolution", type=int, default=20, help="FDTD grid resolution (px/um)")
     parser.add_argument("--sweep", action="store_true", help="Run parameter sweep")
-    parser.add_argument("--lc_min", type=float, default=4.10, help="Sweep: min L_c (um)")
-    parser.add_argument("--lc_max", type=float, default=4.40, help="Sweep: max L_c (um)")
+    parser.add_argument("--lc_min", type=float, default=4.20, help="Sweep: min L_c (um)")
+    parser.add_argument("--lc_max", type=float, default=4.60, help="Sweep: max L_c (um)")
     parser.add_argument("--lc_step", type=float, default=0.10, help="Sweep: L_c step (um)")
     parser.add_argument("--gaps", type=float, nargs="+", default=[0.100], help="Sweep: list of gaps (um)")
     args = parser.parse_args()
 
     if args.sweep:
         run_sweep(lc_min=args.lc_min, lc_max=args.lc_max, lc_step=args.lc_step,
-                  gap_list=args.gaps, resolution=args.resolution)
+                  gap_list=args.gaps, l_pcm_ext=args.pcm_ext, resolution=args.resolution)
     elif args.state == "both":
-        run_both_states(l_c=args.lc, gap=args.gap, resolution=args.resolution)
+        run_both_states(l_c=args.lc, gap=args.gap, l_pcm_ext=args.pcm_ext, l_tip=args.ltip, resolution=args.resolution)
     else:
-        run_straight_through_dc(state=args.state, l_c=args.lc, gap=args.gap, resolution=args.resolution)
+        run_straight_through_dc(state=args.state, l_c=args.lc, gap=args.gap, l_pcm_ext=args.pcm_ext, l_tip=args.ltip, resolution=args.resolution)

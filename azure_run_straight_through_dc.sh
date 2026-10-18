@@ -53,9 +53,10 @@ fi
 
 # ── 4. Parameters ────────────────────────────────────────────────────────────
 MODE="${1:-both}"
-LC="${2:-4.25}"
+LC="${2:-4.40}"
 GAP="${3:-0.100}"
 RES="${4:-20}"
+PCM_EXT="${5:-0.350}"
 
 TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 LOG_DIR="./logs"
@@ -63,14 +64,17 @@ mkdir -p "${LOG_DIR}"
 LOG_FILE="${LOG_DIR}/straight_dc_${MODE}_${TIMESTAMP}.log"
 
 GAP_NM=$(${PYTHON_EXEC} -c "print(f'{float(\"${GAP}\") * 1000.0:.0f}')")
+EXT_NM=$(${PYTHON_EXEC} -c "print(f'{float(\"${PCM_EXT}\") * 1000.0:.0f}')")
 echo "================================================================"
 echo "  PROJECT JANUS: Straight-Through 1x2 DC Switch (3D MEEP FDTD)"
 echo "  Architecture : Port 1 = Straight Through (0 dB bend loss)"
 echo "                 Port 2 = Evanescent Drop (Low-Loss S-Bend)"
+echo "  Fanout Decoup: WG1 PCM Extension = ${EXT_NM} nm (Blocks Fanout Leakage!)"
 echo "================================================================"
 echo "  Mode        : ${MODE}"
-echo "  L_c         : ${LC} um (Crystalline Refinement Peak at gap=${GAP}um)"
+echo "  L_c         : ${LC} um (Calibrated Amorphous Peak)"
 echo "  Gap         : ${GAP_NM} nm"
+echo "  PCM Ext     : ${EXT_NM} nm"
 echo "  Resolution  : ${RES} px/um"
 echo "  Multi-CPU   : ${RUN_CMD}"
 echo "  Log File    : ${LOG_FILE}"
@@ -80,17 +84,19 @@ echo ""
 START_TIME=$(date +%s)
 
 if [ "${MODE}" = "sweep" ]; then
-    echo "Launching fine-grid parameter sweep around peak (L_c=4.10 to 4.40 um, gap=100nm)..."
+    echo "Launching fine-grid parameter sweep around peak (L_c=4.20 to 4.60 um, gap=100nm, ext=${EXT_NM}nm)..."
     ${RUN_CMD} straight_through_dc_switch_3d.py \
         --sweep \
-        --lc_min 4.10 --lc_max 4.40 --lc_step 0.10 \
+        --lc_min 4.20 --lc_max 4.60 --lc_step 0.10 \
         --gaps 0.100 \
+        --pcm_ext "${PCM_EXT}" \
         --resolution "${RES}" 2>&1 | tee "${LOG_FILE}"
 elif [ "${MODE}" = "amorphous" ] || [ "${MODE}" = "crystalline" ]; then
     ${RUN_CMD} straight_through_dc_switch_3d.py \
         --state "${MODE}" \
         --lc "${LC}" \
         --gap "${GAP}" \
+        --pcm_ext "${PCM_EXT}" \
         --resolution "${RES}" 2>&1 | tee "${LOG_FILE}"
 else
     # default: both states
@@ -98,6 +104,7 @@ else
         --state both \
         --lc "${LC}" \
         --gap "${GAP}" \
+        --pcm_ext "${PCM_EXT}" \
         --resolution "${RES}" 2>&1 | tee "${LOG_FILE}"
 fi
 
