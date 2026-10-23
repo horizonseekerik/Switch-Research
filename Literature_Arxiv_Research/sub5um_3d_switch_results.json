@@ -1,0 +1,24 @@
+{
+  "crystalline": {
+    "mode": "3D Full-Wave Maxwell FDTD",
+    "state": "crystalline",
+    "destination_port": "Port 1 (Bar)",
+    "resolution": 20,
+    "sim_runtime_seconds": 67.7,
+    "ref_runtime_seconds": 69.4,
+    "cell_length_um": 4.05,
+    "cell_width_um": 1.0,
+    "cell_area_um2": 4.05,
+    "transmission_pct": 18.32,
+    "leakage_pct": 69.893,
+    "insertion_loss_db": 7.3698,
+    "crosstalk_db": 5.81,
+    "extinction_ratio_db": -5.81,
+    "signal_to_crosstalk_ratio": 0.3,
+    "power_bar_p1": 0.18324,
+    "power_cross_p2": 0.69893,
+    "meets_sub5um_target": true,
+    "meets_il_target": false,
+    "meets_crosstalk_target": false
+  }
+}

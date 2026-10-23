@@ -1,0 +1,379 @@
+﻿{
+  "status": "success",
+  "results_count": 1,
+  "papers": [
+    {
+      "id": "2311.03169v1",
+      "title": "Sb2S3-Based Optical Switch Exploiting the Brewster Angle Phenomenon",
+      "pdf_url": "https://arxiv.org/pdf/2311.03169v1",
+      "summary": "Optical switches based on phase change materials (PCMs) hold great promise for various photonic applications such as telecommunications, data communication, optical interconnects, and signal processing. Their non-volatile nature as well as rapid switching speeds make them highly desirable for developing advanced and energy-efficient optical communication technologies. Ongoing research efforts in exploring new PCMs, optimizing device designs, and overcoming existing challenges are driving the development of innovative and high-performance optical switches for the next generation of photonics applications. In this study, we design and experimentally demonstrate a novel optical amplitude switch design incorporating PCM antimony trisulfide (Sb2S3) based on the Brewster angle phenomenon.",
+      "published": "2023-11-06T15:02:04Z",
+      "primary_category": "physics.optics",
+      "authors": [
+        "Diego Perez-Frances",
+        "Gonzalo Santos",
+        "Josef Resl",
+        "Maria Losurdo",
+        "Yael Gutierrez",
+        "Fernando Moreno"
+      ]
+    }
+  ]
+}
+{
+  "status": "success",
+  "results_count": 2,
+  "papers": [
+    {
+      "id": "2311.03169v1",
+      "title": "Sb2S3-Based Optical Switch Exploiting the Brewster Angle Phenomenon",
+      "pdf_url": "https://arxiv.org/pdf/2311.03169v1",
+      "summary": "Optical switches based on phase change materials (PCMs) hold great promise for various photonic applications such as telecommunications, data communication, optical interconnects, and signal processing. Their non-volatile nature as well as rapid switching speeds make them highly desirable for developing advanced and energy-efficient optical communication technologies. Ongoing research efforts in exploring new PCMs, optimizing device designs, and overcoming existing challenges are driving the development of innovative and high-performance optical switches for the next generation of photonics applications. In this study, we design and experimentally demonstrate a novel optical amplitude switch design incorporating PCM antimony trisulfide (Sb2S3) based on the Brewster angle phenomenon.",
+      "published": "2023-11-06T15:02:04Z",
+      "primary_category": "physics.optics",
+      "authors": [
+        "Diego Perez-Frances",
+        "Gonzalo Santos",
+        "Josef Resl",
+        "Maria Losurdo",
+        "Yael Gutierrez",
+        "Fernando Moreno"
+      ]
+    },
+    {
+      "id": "2212.04333v1",
+      "title": "Pulsed laser deposition of Sb2S3 films for phase-change tunable nanophotonics",
+      "pdf_url": "https://arxiv.org/pdf/2212.04333v1",
+      "summary": "Non-volatile phase-change materials with large optical contrast are essential for future tunable nanophotonics. Antimony trisulfide (Sb2S3) has recently gained popularity in this field due to its low absorption in the visible spectral region. Although several Sb2S3 deposition techniques have been reported in the literature, none of them was optimized with respect to the lowest possible absorption and largest optical contrast upon the phase change. Here, we present a comprehensive multi-parameter optimization of pulsed laser deposition of Sb2S3 towards this end. We correlate the specific deposition and annealing parameters with the resulting optical properties and propose the combination leading to films with extraordinary qualities (\u0394n = 1.2 at 633 nm). Finally, we identify crystal orientations and vibrational modes associated with the largest change in the refractive index and propose them as useful indicators of the Sb2S3 switching contrast.",
+      "published": "2022-12-08T15:26:40Z",
+      "primary_category": "physics.optics",
+      "authors": [
+        "Peter Kepi\u010d",
+        "Petr Li\u0161ka",
+        "Be\u00e1ta Idesov\u00e1",
+        "Ond\u0159ej Caha",
+        "Filip Ligmajer",
+        "Tom\u00e1\u0161 \u0160ikola"
+      ]
+    }
+  ]
+}
+{
+  "status": "success",
+  "results_count": 3,
+  "papers": [
+    {
+      "id": "2311.03169v1",
+      "title": "Sb2S3-Based Optical Switch Exploiting the Brewster Angle Phenomenon",
+      "pdf_url": "https://arxiv.org/pdf/2311.03169v1",
+      "summary": "Optical switches based on phase change materials (PCMs) hold great promise for various photonic applications such as telecommunications, data communication, optical interconnects, and signal processing. Their non-volatile nature as well as rapid switching speeds make them highly desirable for developing advanced and energy-efficient optical communication technologies. Ongoing research efforts in exploring new PCMs, optimizing device designs, and overcoming existing challenges are driving the development of innovative and high-performance optical switches for the next generation of photonics applications. In this study, we design and experimentally demonstrate a novel optical amplitude switch design incorporating PCM antimony trisulfide (Sb2S3) based on the Brewster angle phenomenon.",
+      "published": "2023-11-06T15:02:04Z",
+      "primary_category": "physics.optics",
+      "authors": [
+        "Diego Perez-Frances",
+        "Gonzalo Santos",
+        "Josef Resl",
+        "Maria Losurdo",
+        "Yael Gutierrez",
+        "Fernando Moreno"
+      ]
+    },
+    {
+      "id": "2212.04333v1",
+      "title": "Pulsed laser deposition of Sb2S3 films for phase-change tunable nanophotonics",
+      "pdf_url": "https://arxiv.org/pdf/2212.04333v1",
+      "summary": "Non-volatile phase-change materials with large optical contrast are essential for future tunable nanophotonics. Antimony trisulfide (Sb2S3) has recently gained popularity in this field due to its low absorption in the visible spectral region. Although several Sb2S3 deposition techniques have been reported in the literature, none of them was optimized with respect to the lowest possible absorption and largest optical contrast upon the phase change. Here, we present a comprehensive multi-parameter optimization of pulsed laser deposition of Sb2S3 towards this end. We correlate the specific deposition and annealing parameters with the resulting optical properties and propose the combination leading to films with extraordinary qualities (\u0394n = 1.2 at 633 nm). Finally, we identify crystal orientations and vibrational modes associated with the largest change in the refractive index and propose them as useful indicators of the Sb2S3 switching contrast.",
+      "published": "2022-12-08T15:26:40Z",
+      "primary_category": "physics.optics",
+      "authors": [
+        "Peter Kepi\u010d",
+        "Petr Li\u0161ka",
+        "Be\u00e1ta Idesov\u00e1",
+        "Ond\u0159ej Caha",
+        "Filip Ligmajer",
+        "Tom\u00e1\u0161 \u0160ikola"
+      ]
+    },
+    {
+      "id": "2508.20490v1",
+      "title": "Compact polarization-independent non-volatile optical switches",
+      "pdf_url": "https://arxiv.org/pdf/2508.20490v1",
+      "summary": "Compact, non-volatile optical switches on silicon platforms are essential for reconfigurable photonics, but the strong anisotropy of silicon waveguides leads to polarization-dependent performance. In this paper, we propose a polarization-independent, non-volatile optical switch utilizing low-loss phase change material (PCM) Sb2S3. By incorporating Sb2S3 into a multimode slot waveguide, multimode interference can be efficiently tuned for both TE and TM polarizations, owing to enhanced light-PCM interaction. Polarization-independent switching is achieved through the optimal design of the multimode slot waveguide region. The proposed non-volatile switch demonstrates a crosstalk (CT) < -21.9 dB and insertion loss (IL) < 0.12 dB at 1550 nm with a multimode section length of 9.67 \u03bcm, which may find promising applications in reconfigurable photonic circuits for on-chip optical signal processing.",
+      "published": "2025-08-28T07:12:35Z",
+      "primary_category": "physics.optics",
+      "authors": [
+        "Fangfa Bao",
+        "Jiakai Ruan",
+        "Weijia Li",
+        "Wei Zhang",
+        "Guoxiang Wang",
+        "Xiang Shen",
+        "Yixiao Gao"
+      ]
+    }
+  ]
+}
+{
+  "status": "success",
+  "results_count": 4,
+  "papers": [
+    {
+      "id": "2311.03169v1",
+      "title": "Sb2S3-Based Optical Switch Exploiting the Brewster Angle Phenomenon",
+      "pdf_url": "https://arxiv.org/pdf/2311.03169v1",
+      "summary": "Optical switches based on phase change materials (PCMs) hold great promise for various photonic applications such as telecommunications, data communication, optical interconnects, and signal processing. Their non-volatile nature as well as rapid switching speeds make them highly desirable for developing advanced and energy-efficient optical communication technologies. Ongoing research efforts in exploring new PCMs, optimizing device designs, and overcoming existing challenges are driving the development of innovative and high-performance optical switches for the next generation of photonics applications. In this study, we design and experimentally demonstrate a novel optical amplitude switch design incorporating PCM antimony trisulfide (Sb2S3) based on the Brewster angle phenomenon.",
+      "published": "2023-11-06T15:02:04Z",
+      "primary_category": "physics.optics",
+      "authors": [
+        "Diego Perez-Frances",
+        "Gonzalo Santos",
+        "Josef Resl",
+        "Maria Losurdo",
+        "Yael Gutierrez",
+        "Fernando Moreno"
+      ]
+    },
+    {
+      "id": "2212.04333v1",
+      "title": "Pulsed laser deposition of Sb2S3 films for phase-change tunable nanophotonics",
+      "pdf_url": "https://arxiv.org/pdf/2212.04333v1",
+      "summary": "Non-volatile phase-change materials with large optical contrast are essential for future tunable nanophotonics. Antimony trisulfide (Sb2S3) has recently gained popularity in this field due to its low absorption in the visible spectral region. Although several Sb2S3 deposition techniques have been reported in the literature, none of them was optimized with respect to the lowest possible absorption and largest optical contrast upon the phase change. Here, we present a comprehensive multi-parameter optimization of pulsed laser deposition of Sb2S3 towards this end. We correlate the specific deposition and annealing parameters with the resulting optical properties and propose the combination leading to films with extraordinary qualities (\u0394n = 1.2 at 633 nm). Finally, we identify crystal orientations and vibrational modes associated with the largest change in the refractive index and propose them as useful indicators of the Sb2S3 switching contrast.",
+      "published": "2022-12-08T15:26:40Z",
+      "primary_category": "physics.optics",
+      "authors": [
+        "Peter Kepi\u010d",
+        "Petr Li\u0161ka",
+        "Be\u00e1ta Idesov\u00e1",
+        "Ond\u0159ej Caha",
+        "Filip Ligmajer",
+        "Tom\u00e1\u0161 \u0160ikola"
+      ]
+    },
+    {
+      "id": "2508.20490v1",
+      "title": "Compact polarization-independent non-volatile optical switches",
+      "pdf_url": "https://arxiv.org/pdf/2508.20490v1",
+      "summary": "Compact, non-volatile optical switches on silicon platforms are essential for reconfigurable photonics, but the strong anisotropy of silicon waveguides leads to polarization-dependent performance. In this paper, we propose a polarization-independent, non-volatile optical switch utilizing low-loss phase change material (PCM) Sb2S3. By incorporating Sb2S3 into a multimode slot waveguide, multimode interference can be efficiently tuned for both TE and TM polarizations, owing to enhanced light-PCM interaction. Polarization-independent switching is achieved through the optimal design of the multimode slot waveguide region. The proposed non-volatile switch demonstrates a crosstalk (CT) < -21.9 dB and insertion loss (IL) < 0.12 dB at 1550 nm with a multimode section length of 9.67 \u03bcm, which may find promising applications in reconfigurable photonic circuits for on-chip optical signal processing.",
+      "published": "2025-08-28T07:12:35Z",
+      "primary_category": "physics.optics",
+      "authors": [
+        "Fangfa Bao",
+        "Jiakai Ruan",
+        "Weijia Li",
+        "Wei Zhang",
+        "Guoxiang Wang",
+        "Xiang Shen",
+        "Yixiao Gao"
+      ]
+    },
+    {
+      "id": "2606.08318v1",
+      "title": "Inverse designed resistive heaters for uniform switching of Phase Change Materials",
+      "pdf_url": "https://arxiv.org/pdf/2606.08318v1",
+      "summary": "Non-volatile phase-change material (PCM)-integrated metasurfaces offer a promising pathway toward next-generation solid-state reconfigurable free-space optics. However, their practical operation is currently bottlenecked by the highly non-uniform thermal profiles generated by the external heaters used to switch the PCM between its amorphous and crystalline states. The non-uniform heat profile in turn severely restricts the active switching area of the PCM integrated devices. In this work, we present an inverse-designed doped silicon resistive heater on a silicon-on-sapphire platform, featuring a spatially varying doping profile explicitly tailored to generate uniform heat. The new heater significantly improves spatial temperature uniformity, reducing the thermal gradient from 110 K in the case of typical conventional heater to merely 25 K in the case of the inverse-designed heater at a target temperature of ~1000 K. By meticulously optimizing the doping and annealing processes to suppress lateral dopant diffusion, we achieve a near-perfect spatial doping resolution capable of patterning two distinct doped Silicon filaments just 100 nm apart. We experimentally fabricate these devices and demonstrate their efficacy by successfully switching a large area (~18 x 14 micrometer square) of the wide-bandgap phase-change material (PCM) Sb2S3 using a compact heater geometry of size 26 x 26 micrometer square. We show that our inverse-designed heater achieves a 10-fold increase in active PCM switching area despite a reduction in the total heater footprint when compared to a conventional heater. Ultimately, this work provides a crucial steppingstone toward the development of non-volatile PCM-based reconfigurable free-space optics.",
+      "published": "2026-06-06T20:13:35Z",
+      "comment": "14 pages, 4 figures",
+      "primary_category": "physics.optics",
+      "authors": [
+        "Virat Tara",
+        "Khoi P. Dao",
+        "Juejun Hu",
+        "Arka Majumdar"
+      ]
+    }
+  ]
+}
+{
+  "status": "success",
+  "results_count": 5,
+  "papers": [
+    {
+      "id": "2311.03169v1",
+      "title": "Sb2S3-Based Optical Switch Exploiting the Brewster Angle Phenomenon",
+      "pdf_url": "https://arxiv.org/pdf/2311.03169v1",
+      "summary": "Optical switches based on phase change materials (PCMs) hold great promise for various photonic applications such as telecommunications, data communication, optical interconnects, and signal processing. Their non-volatile nature as well as rapid switching speeds make them highly desirable for developing advanced and energy-efficient optical communication technologies. Ongoing research efforts in exploring new PCMs, optimizing device designs, and overcoming existing challenges are driving the development of innovative and high-performance optical switches for the next generation of photonics applications. In this study, we design and experimentally demonstrate a novel optical amplitude switch design incorporating PCM antimony trisulfide (Sb2S3) based on the Brewster angle phenomenon.",
+      "published": "2023-11-06T15:02:04Z",
+      "primary_category": "physics.optics",
+      "authors": [
+        "Diego Perez-Frances",
+        "Gonzalo Santos",
+        "Josef Resl",
+        "Maria Losurdo",
+        "Yael Gutierrez",
+        "Fernando Moreno"
+      ]
+    },
+    {
+      "id": "2212.04333v1",
+      "title": "Pulsed laser deposition of Sb2S3 films for phase-change tunable nanophotonics",
+      "pdf_url": "https://arxiv.org/pdf/2212.04333v1",
+      "summary": "Non-volatile phase-change materials with large optical contrast are essential for future tunable nanophotonics. Antimony trisulfide (Sb2S3) has recently gained popularity in this field due to its low absorption in the visible spectral region. Although several Sb2S3 deposition techniques have been reported in the literature, none of them was optimized with respect to the lowest possible absorption and largest optical contrast upon the phase change. Here, we present a comprehensive multi-parameter optimization of pulsed laser deposition of Sb2S3 towards this end. We correlate the specific deposition and annealing parameters with the resulting optical properties and propose the combination leading to films with extraordinary qualities (\u0394n = 1.2 at 633 nm). Finally, we identify crystal orientations and vibrational modes associated with the largest change in the refractive index and propose them as useful indicators of the Sb2S3 switching contrast.",
+      "published": "2022-12-08T15:26:40Z",
+      "primary_category": "physics.optics",
+      "authors": [
+        "Peter Kepi\u010d",
+        "Petr Li\u0161ka",
+        "Be\u00e1ta Idesov\u00e1",
+        "Ond\u0159ej Caha",
+        "Filip Ligmajer",
+        "Tom\u00e1\u0161 \u0160ikola"
+      ]
+    },
+    {
+      "id": "2508.20490v1",
+      "title": "Compact polarization-independent non-volatile optical switches",
+      "pdf_url": "https://arxiv.org/pdf/2508.20490v1",
+      "summary": "Compact, non-volatile optical switches on silicon platforms are essential for reconfigurable photonics, but the strong anisotropy of silicon waveguides leads to polarization-dependent performance. In this paper, we propose a polarization-independent, non-volatile optical switch utilizing low-loss phase change material (PCM) Sb2S3. By incorporating Sb2S3 into a multimode slot waveguide, multimode interference can be efficiently tuned for both TE and TM polarizations, owing to enhanced light-PCM interaction. Polarization-independent switching is achieved through the optimal design of the multimode slot waveguide region. The proposed non-volatile switch demonstrates a crosstalk (CT) < -21.9 dB and insertion loss (IL) < 0.12 dB at 1550 nm with a multimode section length of 9.67 \u03bcm, which may find promising applications in reconfigurable photonic circuits for on-chip optical signal processing.",
+      "published": "2025-08-28T07:12:35Z",
+      "primary_category": "physics.optics",
+      "authors": [
+        "Fangfa Bao",
+        "Jiakai Ruan",
+        "Weijia Li",
+        "Wei Zhang",
+        "Guoxiang Wang",
+        "Xiang Shen",
+        "Yixiao Gao"
+      ]
+    },
+    {
+      "id": "2606.08318v1",
+      "title": "Inverse designed resistive heaters for uniform switching of Phase Change Materials",
+      "pdf_url": "https://arxiv.org/pdf/2606.08318v1",
+      "summary": "Non-volatile phase-change material (PCM)-integrated metasurfaces offer a promising pathway toward next-generation solid-state reconfigurable free-space optics. However, their practical operation is currently bottlenecked by the highly non-uniform thermal profiles generated by the external heaters used to switch the PCM between its amorphous and crystalline states. The non-uniform heat profile in turn severely restricts the active switching area of the PCM integrated devices. In this work, we present an inverse-designed doped silicon resistive heater on a silicon-on-sapphire platform, featuring a spatially varying doping profile explicitly tailored to generate uniform heat. The new heater significantly improves spatial temperature uniformity, reducing the thermal gradient from 110 K in the case of typical conventional heater to merely 25 K in the case of the inverse-designed heater at a target temperature of ~1000 K. By meticulously optimizing the doping and annealing processes to suppress lateral dopant diffusion, we achieve a near-perfect spatial doping resolution capable of patterning two distinct doped Silicon filaments just 100 nm apart. We experimentally fabricate these devices and demonstrate their efficacy by successfully switching a large area (~18 x 14 micrometer square) of the wide-bandgap phase-change material (PCM) Sb2S3 using a compact heater geometry of size 26 x 26 micrometer square. We show that our inverse-designed heater achieves a 10-fold increase in active PCM switching area despite a reduction in the total heater footprint when compared to a conventional heater. Ultimately, this work provides a crucial steppingstone toward the development of non-volatile PCM-based reconfigurable free-space optics.",
+      "published": "2026-06-06T20:13:35Z",
+      "comment": "14 pages, 4 figures",
+      "primary_category": "physics.optics",
+      "authors": [
+        "Virat Tara",
+        "Khoi P. Dao",
+        "Juejun Hu",
+        "Arka Majumdar"
+      ]
+    },
+    {
+      "id": "2101.04316v1",
+      "title": "Non-volatile reconfigurable integrated photonics enabled by broadband low-loss phase change material",
+      "pdf_url": "https://arxiv.org/pdf/2101.04316v1",
+      "summary": "Phase change materials (PCMs) have long been used as a storage medium in rewritable compact disk and later in random access memory. In recent years, the integration of PCMs with nanophotonic structures has introduced a new paradigm for non-volatile reconfigurable optics. However, the high loss of the archetypal PCM Ge2Sb2Te5 in both visible and telecommunication wavelengths has fundamentally limited its applications. Sb2S3 has recently emerged as a wide-bandgap PCM with transparency windows ranging from 610nm to near-IR. In this paper, the strong optical phase modulation and low optical loss of Sb2S3 are experimentally demonstrated for the first time in integrated photonic platforms at both 750nm and 1550nm. As opposed to silicon, the thermo-optic coefficient of Sb2S3 is shown to be negative, making the Sb2S3-Si hybrid platform less sensitive to thermal fluctuation. Finally, a Sb2S3 integrated non-volatile microring switch is demonstrated which can be tuned electrically between a high and low transmission state with a contrast over 30dB. Our work experimentally verified the prominent phase modification and low loss of Sb2S3 in wavelength ranges relevant for both solid-state quantum emitter and telecommunication, enabling potential applications such as optical field programmable gate array, post-fabrication trimming, and large-scale integrated quantum photonic network.",
+      "published": "2021-01-12T06:30:30Z",
+      "primary_category": "physics.optics",
+      "journal_ref": "Adv. Optical Mater. 2021, 9, 2002049",
+      "doi": "10.1002/adom.202002049",
+      "authors": [
+        "Zhuoran Fang",
+        "Jiajiu Zheng",
+        "Abhi Saxena",
+        "James Whitehead",
+        "Yueyang Chen",
+        "Arka Majumdar"
+      ]
+    }
+  ]
+}
+{
+  "status": "success",
+  "results_count": 6,
+  "papers": [
+    {
+      "id": "2311.03169v1",
+      "title": "Sb2S3-Based Optical Switch Exploiting the Brewster Angle Phenomenon",
+      "pdf_url": "https://arxiv.org/pdf/2311.03169v1",
+      "summary": "Optical switches based on phase change materials (PCMs) hold great promise for various photonic applications such as telecommunications, data communication, optical interconnects, and signal processing. Their non-volatile nature as well as rapid switching speeds make them highly desirable for developing advanced and energy-efficient optical communication technologies. Ongoing research efforts in exploring new PCMs, optimizing device designs, and overcoming existing challenges are driving the development of innovative and high-performance optical switches for the next generation of photonics applications. In this study, we design and experimentally demonstrate a novel optical amplitude switch design incorporating PCM antimony trisulfide (Sb2S3) based on the Brewster angle phenomenon.",
+      "published": "2023-11-06T15:02:04Z",
+      "primary_category": "physics.optics",
+      "authors": [
+        "Diego Perez-Frances",
+        "Gonzalo Santos",
+        "Josef Resl",
+        "Maria Losurdo",
+        "Yael Gutierrez",
+        "Fernando Moreno"
+      ]
+    },
+    {
+      "id": "2212.04333v1",
+      "title": "Pulsed laser deposition of Sb2S3 films for phase-change tunable nanophotonics",
+      "pdf_url": "https://arxiv.org/pdf/2212.04333v1",
+      "summary": "Non-volatile phase-change materials with large optical contrast are essential for future tunable nanophotonics. Antimony trisulfide (Sb2S3) has recently gained popularity in this field due to its low absorption in the visible spectral region. Although several Sb2S3 deposition techniques have been reported in the literature, none of them was optimized with respect to the lowest possible absorption and largest optical contrast upon the phase change. Here, we present a comprehensive multi-parameter optimization of pulsed laser deposition of Sb2S3 towards this end. We correlate the specific deposition and annealing parameters with the resulting optical properties and propose the combination leading to films with extraordinary qualities (\u0394n = 1.2 at 633 nm). Finally, we identify crystal orientations and vibrational modes associated with the largest change in the refractive index and propose them as useful indicators of the Sb2S3 switching contrast.",
+      "published": "2022-12-08T15:26:40Z",
+      "primary_category": "physics.optics",
+      "authors": [
+        "Peter Kepi\u010d",
+        "Petr Li\u0161ka",
+        "Be\u00e1ta Idesov\u00e1",
+        "Ond\u0159ej Caha",
+        "Filip Ligmajer",
+        "Tom\u00e1\u0161 \u0160ikola"
+      ]
+    },
+    {
+      "id": "2508.20490v1",
+      "title": "Compact polarization-independent non-volatile optical switches",
+      "pdf_url": "https://arxiv.org/pdf/2508.20490v1",
+      "summary": "Compact, non-volatile optical switches on silicon platforms are essential for reconfigurable photonics, but the strong anisotropy of silicon waveguides leads to polarization-dependent performance. In this paper, we propose a polarization-independent, non-volatile optical switch utilizing low-loss phase change material (PCM) Sb2S3. By incorporating Sb2S3 into a multimode slot waveguide, multimode interference can be efficiently tuned for both TE and TM polarizations, owing to enhanced light-PCM interaction. Polarization-independent switching is achieved through the optimal design of the multimode slot waveguide region. The proposed non-volatile switch demonstrates a crosstalk (CT) < -21.9 dB and insertion loss (IL) < 0.12 dB at 1550 nm with a multimode section length of 9.67 \u03bcm, which may find promising applications in reconfigurable photonic circuits for on-chip optical signal processing.",
+      "published": "2025-08-28T07:12:35Z",
+      "primary_category": "physics.optics",
+      "authors": [
+        "Fangfa Bao",
+        "Jiakai Ruan",
+        "Weijia Li",
+        "Wei Zhang",
+        "Guoxiang Wang",
+        "Xiang Shen",
+        "Yixiao Gao"
+      ]
+    },
+    {
+      "id": "2606.08318v1",
+      "title": "Inverse designed resistive heaters for uniform switching of Phase Change Materials",
+      "pdf_url": "https://arxiv.org/pdf/2606.08318v1",
+      "summary": "Non-volatile phase-change material (PCM)-integrated metasurfaces offer a promising pathway toward next-generation solid-state reconfigurable free-space optics. However, their practical operation is currently bottlenecked by the highly non-uniform thermal profiles generated by the external heaters used to switch the PCM between its amorphous and crystalline states. The non-uniform heat profile in turn severely restricts the active switching area of the PCM integrated devices. In this work, we present an inverse-designed doped silicon resistive heater on a silicon-on-sapphire platform, featuring a spatially varying doping profile explicitly tailored to generate uniform heat. The new heater significantly improves spatial temperature uniformity, reducing the thermal gradient from 110 K in the case of typical conventional heater to merely 25 K in the case of the inverse-designed heater at a target temperature of ~1000 K. By meticulously optimizing the doping and annealing processes to suppress lateral dopant diffusion, we achieve a near-perfect spatial doping resolution capable of patterning two distinct doped Silicon filaments just 100 nm apart. We experimentally fabricate these devices and demonstrate their efficacy by successfully switching a large area (~18 x 14 micrometer square) of the wide-bandgap phase-change material (PCM) Sb2S3 using a compact heater geometry of size 26 x 26 micrometer square. We show that our inverse-designed heater achieves a 10-fold increase in active PCM switching area despite a reduction in the total heater footprint when compared to a conventional heater. Ultimately, this work provides a crucial steppingstone toward the development of non-volatile PCM-based reconfigurable free-space optics.",
+      "published": "2026-06-06T20:13:35Z",
+      "comment": "14 pages, 4 figures",
+      "primary_category": "physics.optics",
+      "authors": [
+        "Virat Tara",
+        "Khoi P. Dao",
+        "Juejun Hu",
+        "Arka Majumdar"
+      ]
+    },
+    {
+      "id": "2101.04316v1",
+      "title": "Non-volatile reconfigurable integrated photonics enabled by broadband low-loss phase change material",
+      "pdf_url": "https://arxiv.org/pdf/2101.04316v1",
+      "summary": "Phase change materials (PCMs) have long been used as a storage medium in rewritable compact disk and later in random access memory. In recent years, the integration of PCMs with nanophotonic structures has introduced a new paradigm for non-volatile reconfigurable optics. However, the high loss of the archetypal PCM Ge2Sb2Te5 in both visible and telecommunication wavelengths has fundamentally limited its applications. Sb2S3 has recently emerged as a wide-bandgap PCM with transparency windows ranging from 610nm to near-IR. In this paper, the strong optical phase modulation and low optical loss of Sb2S3 are experimentally demonstrated for the first time in integrated photonic platforms at both 750nm and 1550nm. As opposed to silicon, the thermo-optic coefficient of Sb2S3 is shown to be negative, making the Sb2S3-Si hybrid platform less sensitive to thermal fluctuation. Finally, a Sb2S3 integrated non-volatile microring switch is demonstrated which can be tuned electrically between a high and low transmission state with a contrast over 30dB. Our work experimentally verified the prominent phase modification and low loss of Sb2S3 in wavelength ranges relevant for both solid-state quantum emitter and telecommunication, enabling potential applications such as optical field programmable gate array, post-fabrication trimming, and large-scale integrated quantum photonic network.",
+      "published": "2021-01-12T06:30:30Z",
+      "primary_category": "physics.optics",
+      "journal_ref": "Adv. Optical Mater. 2021, 9, 2002049",
+      "doi": "10.1002/adom.202002049",
+      "authors": [
+        "Zhuoran Fang",
+        "Jiajiu Zheng",
+        "Abhi Saxena",
+        "James Whitehead",
+        "Yueyang Chen",
+        "Arka Majumdar"
+      ]
+    },
+    {
+      "id": "2408.10110v1",
+      "title": "Electrically Reconfigurable Non-Volatile On-Chip Bragg Filter with Multilevel Operation",
+      "pdf_url": "https://arxiv.org/pdf/2408.10110v1",
+      "summary": "Photonic integrated circuits (PICs) demand tailored spectral responses for various applications. On-chip Bragg filters offer a promising solution, yet their static nature hampers scalability. Current tunable filters rely on volatile switching mechanisms plagued by high static power consumption and thermal crosstalk. Here, we introduce, for the first time, a non-volatile, electrically programmable on-chip Bragg filter. This device incorporates a nanoscale layer of wide-bandgap phase change material (Sb2S3) atop a periodically structured silicon waveguide. The reversible phase transitions and drastic refractive index modulation of Sb2S3 enable dynamic spectral tuning via foundry-compatible microheaters. Our design surpasses traditional passive Bragg gratings and active volatile filters by offering electrically controlled, reconfigurable spectral responses in a non-volatile manner. The proposed filter achieves a peak reflectivity exceeding 99% and a high tuning range ($\u0394\u03bb$=20 nm) when transitioning between the amorphous and crystalline states of Sb2S3. Additionally, we demonstrate quasi-continuous spectral control of the filter stopband by modulating the amorphous/crystalline distribution within Sb2S3. Our approach offers substantial benefits for low-power, programmable PICs, thereby laying the groundwork for prospective applications in optical communications, optical interconnects, microwave photonics, optical signal processing, and adaptive multi-parameter sensing.",
+      "published": "2024-08-19T15:59:30Z",
+      "comment": "20 pages, 4 figures,",
+      "primary_category": "physics.optics",
+      "authors": [
+        "Amged Alquliah",
+        "Jay Ke-Chieh Sun",
+        "Christopher Mekhiel",
+        "Chengkuan Gao",
+        "Guli Gulinihali",
+        "Yeshaiahu Fainman",
+        "Abdoulaye Ndao"
+      ]
+    }
+  ]
+}

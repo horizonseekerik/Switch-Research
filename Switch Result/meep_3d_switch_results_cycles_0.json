@@ -1,0 +1,28 @@
+{
+  "state0": {
+    "state": "amorphous",
+    "cycle_count": 0.0,
+    "transmission_pct": 0.0019732926030359473,
+    "bar_p1_pct": 80.49569097058395,
+    "cross_p2_pct": 0.0019732926030359473,
+    "guided_power_pct": 80.49766426318699,
+    "radiation_loss_pct": 19.502335736813002,
+    "insertion_loss_db": 47.04808512080842,
+    "crosstalk_db": 46.10581144774355,
+    "elapsed_s": 31.190271139144897,
+    "footprint_um2": 5.7229
+  },
+  "state1": {
+    "state": "crystalline",
+    "cycle_count": 0.0,
+    "transmission_pct": 79.17071668947179,
+    "bar_p1_pct": 79.17071668947179,
+    "cross_p2_pct": 0.705675876016039,
+    "guided_power_pct": 79.87639256548783,
+    "radiation_loss_pct": 20.12360743451217,
+    "insertion_loss_db": 1.0143542361057176,
+    "crosstalk_db": -20.49959305337884,
+    "elapsed_s": 26.646309852600098,
+    "footprint_um2": 5.7229
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "amorphous": {
+    "mode": "3D Full-Wave Maxwell FDTD",
+    "state": "amorphous",
+    "destination_port": "Port 2 (Cross)",
+    "resolution": 15,
+    "sim_runtime_seconds": 30.9,
+    "ref_runtime_seconds": 27.0,
+    "cell_length_um": 4.05,
+    "cell_width_um": 1.0,
+    "cell_area_um2": 4.05,
+    "transmission_pct": 49.33,
+    "leakage_pct": 32.127,
+    "insertion_loss_db": 3.0689,
+    "crosstalk_db": -1.86,
+    "extinction_ratio_db": 1.86,
+    "signal_to_crosstalk_ratio": 1.5,
+    "power_bar_p1": 0.32127,
+    "power_cross_p2": 0.4933,
+    "meets_sub5um_target": true,
+    "meets_il_target": false,
+    "meets_crosstalk_target": false
+  }
+}
